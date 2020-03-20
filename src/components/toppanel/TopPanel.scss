@@ -1,0 +1,16 @@
+.TopPanel {
+  background: #3D5B77;
+
+
+  ul {
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    li {
+      border-right: 1px solid #3D5B77;
+    }
+  }
+}
