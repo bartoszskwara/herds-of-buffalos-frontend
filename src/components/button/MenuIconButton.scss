@@ -8,7 +8,6 @@
   box-sizing: border-box;
   overflow: auto;
 
-
   &:hover {
     background: #54789A;
     cursor: pointer;
@@ -30,7 +29,7 @@
   }
 
   .menuIcon {
-    font-size: 25px;
+    font-size: 30px;
     color: #CADBEB;
   }
 }
@@ -48,4 +47,8 @@
 .square {
   height: 80px;
   width: 80px;
+}
+
+a {
+  text-decoration: none;
 }

@@ -17,7 +17,6 @@ class MenuIconButton extends React.Component {
     }
 
     render() {
-        console.log(this.props.menuItem.link);
         return (
             <NavLink to={this.props.menuItem.link} className={"MenuIconButton " + (this.props.horizontal ? 'horizontal' : '') + (this.props.vertical ? 'vertical' : '') + (this.props.square ? 'square' : '')}>
                 <span className="menuIcon">

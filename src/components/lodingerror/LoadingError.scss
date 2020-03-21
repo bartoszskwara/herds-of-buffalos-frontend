@@ -1,0 +1,13 @@
+.LoadingError {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    margin: 0;
+    padding: 0;
+    font-weight: 300;
+    font-size: 20px;
+  }
+}

@@ -6,8 +6,8 @@ import Dashboard from "../components/dashboard/Dashboard";
 import LeftUpperCorner from "../components/leftuppercorner/LeftUpperCorner";
 import {  } from '@fortawesome/free-solid-svg-icons';
 import {Route, Link, BrowserRouter, Switch} from "react-router-dom";
-import Test from "../components/Test/Test";
-import NotFound from "../components/NotFound/NotFound";
+import Test from "../components/test/Test";
+import NotFound from "../components/notfound/NotFound";
 
 class App extends React.Component {
     render() {
@@ -15,37 +15,37 @@ class App extends React.Component {
         const menuItemsLeftPanel = [
             {
                 name: "home",
-                icon: <i className="fas fa-home"></i>,
+                icon: <i className="icofont-home"></i>,
                 link: "/"
             },
             {
                 name: "map",
-                icon: <i className="fas fa-globe-americas"></i>,
+                icon: <i className="icofont-world"></i>,
                 link: "/map"
             },
             {
                 name: "herd",
-                icon: <i className="fas fa-users"></i>,
+                icon: <i className="icofont-users-alt-5"></i>,
                 link: "/herd"
             },
             {
                 name: "ranking",
-                icon: <i className="fas fa-trophy"></i>,
+                icon: <i className="icofont-trophy-alt"></i>,
                 link: "/ranking"
             },
             {
                 name: "buildings",
-                icon: <i className="fas fa-city"></i>,
+                icon: <i className="icofont-industries-4"></i>,
                 link: "/buildings"
             },
             {
                 name: "calendar",
-                icon: <i className="fas fa-calendar-check"></i>,
+                icon: <i className="icofont-ui-calendar"></i>,
                 link: "/calendar"
             },
             {
                 name: "settings",
-                icon: <i className="fas fa-tools"></i>,
+                icon: <i className="icofont-settings"></i>,
                 link: "/settings"
             }
         ];
@@ -53,17 +53,17 @@ class App extends React.Component {
         const menuItemsTopPanel = [
             {
                 name: "tasks",
-                icon: <i className="fas fa-tasks"></i>,
+                icon: <i className="icofont-tasks-alt"></i>,
                 link: "/tasks"
             },
             {
                 name: "messages",
-                icon: <i className="fas fa-envelope"></i>,
+                icon: <i className="icofont-ui-message"></i>,
                 link: "/messages"
             },
             {
                 name: "profile",
-                icon: <i className="fas fa-user"></i>,
+                icon: <i className="icofont-user-alt-4"></i>,
                 link: "/profile"
             }
         ];

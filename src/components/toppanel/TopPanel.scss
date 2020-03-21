@@ -1,8 +1,13 @@
 .TopPanel {
   background: #3D5B77;
-
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 
   ul {
+    list-style: none;
+    padding: 0;
     margin: 0;
     display: flex;
     flex-direction: row;
@@ -10,7 +15,7 @@
     align-items: center;
     height: 100%;
     li {
-      border-right: 1px solid #3D5B77;
+      border-left: 1px solid #3D5B77;
     }
   }
 }

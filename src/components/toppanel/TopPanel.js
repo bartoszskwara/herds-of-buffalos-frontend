@@ -2,6 +2,7 @@ import React from 'react';
 import './TopPanel.scss';
 import MenuIconButton from "../button/MenuIconButton";
 import PropTypes from "prop-types";
+import TopSearch from "../topsearch/TopSearch";
 
 class TopPanel extends React.Component {
 
@@ -17,6 +18,7 @@ class TopPanel extends React.Component {
         const menuItems = this.props.menuItems.map(item => <li key={`menuItem-${item.name}`}><MenuIconButton menuItem={item} vertical /></li>);
         return (
             <div className="TopPanel">
+                <TopSearch />
                 <ul>
                     {menuItems}
                 </ul>
