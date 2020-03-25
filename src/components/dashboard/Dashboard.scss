@@ -1,10 +1,10 @@
-.Dashboard {
-  background: #cadbeb;
+@import '../../styles/theme';
 
-  .header {
+.Dashboard {
+  background: $accent-color-300;
+
+  .header, .content {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     flex-wrap: wrap;
   }
 

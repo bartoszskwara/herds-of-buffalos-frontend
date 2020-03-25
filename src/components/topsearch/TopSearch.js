@@ -1,23 +1,17 @@
 import React from 'react';
 import './TopSearch.scss';
-import PropTypes from 'prop-types';
 
-class TopSearch extends React.Component {
+const TopSearch = () => {
 
-    static propTypes = {};
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div className="TopSearch">
-                <i className="fas fa-search"></i>
+    return (
+        <div className="TopSearch">
+            <i className="fas fa-search"></i>
+            <div className="search-box">
                 <input type="text" placeholder="Search for tasks, messages and buildings" />
+                <div className="bottom-border"></div>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 export default TopSearch;

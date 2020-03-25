@@ -1,5 +1,7 @@
+@import '../../styles/theme';
+
 .LeftPanel {
-    background: #4b6c8b;
+    background: $primary-color-200;
 
     ul {
         list-style: none;
@@ -7,11 +9,11 @@
         margin: 0;
 
         li {
-            border-bottom: 1px solid #3D5B77;
+            border-bottom: 1px solid $primary-color-300;
         }
 
         li:first-of-type {
-            border-top: 1px solid #3D5B77;
+            border-top: 1px solid $primary-color-300;
         }
     }
 }

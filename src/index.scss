@@ -1,0 +1,22 @@
+@import 'styles/theme';
+
+body {
+  margin: 0;
+}
+
+html, body, #root {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  flex-shrink: 0;
+  font-family: Khand, sans-serif;
+  font-weight: 400;
+  color: $primary-color-300;
+  min-height: 100%;
+}
+
+@font-face {
+  font-family: Exo2MediumCondensed;
+  src: url('styles/fonts/Exo2-MediumCondensed.otf');
+}

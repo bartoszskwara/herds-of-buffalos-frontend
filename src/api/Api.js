@@ -33,5 +33,11 @@ export const Api = {
             url: "/user/{userId}/city/{cityId}",
             method: "get"
         }
+    },
+    cityUnit: {
+        getAllCityUnits: {
+            url: "/user/{userId}/city/{cityId}/unit",
+            method: "get"
+        }
     }
 };

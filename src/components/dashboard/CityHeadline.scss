@@ -1,5 +1,7 @@
+@import '../../styles/theme';
+
 .CityHeadline {
-  background: #FFFFFF;
+  background: $accent-color-100;
   padding: 10px;
   display: flex;
   align-items: center;
