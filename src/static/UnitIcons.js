@@ -2,7 +2,7 @@ import React from 'react';
 import { ReactComponent as Rifle } from '../images/unit/rifle.svg';
 import { ReactComponent as Binoculars } from '../images/unit/binoculars.svg';
 import { ReactComponent as Target } from '../images/unit/target.svg';
-import { ReactComponent as Privacy } from '../images/unit/privacy.svg';
+import { ReactComponent as Unknown } from '../images/unknown.svg';
 import { ReactComponent as Spear } from '../images/unit/spear.svg';
 import { ReactComponent as Axe } from '../images/unit/axe.svg';
 
@@ -29,6 +29,6 @@ export const unitIcons = {
     },
     unknown: {
         key: "unknown",
-        icon: <Privacy className="unit-icon-svg" />
+        icon: <Unknown className="unit-icon-svg" />
     }
 };

@@ -1,0 +1,70 @@
+@import '../../../styles/theme';
+
+.BuildingProgress {
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  border-bottom: 1px solid $black-color-100;
+  padding: 10px 10px;
+  min-width: 250px;
+  background: $accent-color-100;
+
+  &:nth-child(even) {
+    background: $accent-color-150;
+  }
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  .building-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $accent-color-300;
+    border: 3px double $accent-color-100;
+    border-radius: 2px;
+    padding: 10px;
+  }
+
+  .progress-box {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding-left: 10px;
+
+    .building-name {
+      p {
+        font-weight: 500;
+        .level {
+          font-weight: 300;
+        }
+      }
+    }
+
+    .progress-bar-box {
+      padding: 0 20px 0 0;
+
+      .progress-bar {
+        border-radius: 2px;
+        background: $green-color-200;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        min-width: 10px;
+        padding: 2px 5px;
+
+        p {
+          margin-bottom: -3px;
+          color: $accent-color-100;
+          font-size: 12px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+}

@@ -15,7 +15,7 @@ const UnitSymbol = props => {
 };
 
 const UnitLevelData = props => {
-    const unitIconData = unitIcons[props.unitKey] || unitIcons["unknown"];
+    const unitIconData = unitIcons[props.unitKey] || unitIcons.unknown;
     const unitIcon = React.cloneElement(
         unitIconData.icon,
         { width: "20px", height: "20px" }

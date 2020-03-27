@@ -6,6 +6,7 @@ import CityHeadline from "./CityHeadline";
 import CityUnitsPanel from "./cityunitspanel/CityUnitsPanel";
 import DashboardPanel from "./DashboardPanel";
 import BuildingProgressPanel from "./buildingprogresspanel/BuildingProgressPanel";
+import PropTypes from "prop-types";
 
 const getCurrentUserData = setPlayerHeadlineData => {
     apiCall(Api.user.getCurrentUser)
@@ -41,10 +42,23 @@ const getAllCityUnits = (userId, cityId, setCityUnitsData) => {
         }));
 };
 
+const getCityBuildingProgress = (userId, cityId, setBuildingProgressData) => {
+    apiCall(Api.cityBuilding.getCityBuildingProgress, { pathVariables: { userId, cityId } })
+        .then(response => {
+            setBuildingProgressData({
+                buildingProgressData: response.data.content
+            })
+        })
+        .catch(error => setBuildingProgressData({
+            error: "Error when fetching building progress data."
+        }));
+};
+
 const Dashboard = props => {
     const [playerHeadlineData, setPlayerHeadlineData] = useState({});
     const [cityHeadlineData, setCityHeadlineData] = useState({});
     const [cityUnitsData, setCityUnitsData] = useState({});
+    const [buildingProgressData, setBuildingProgressData] = useState({});
 
     useEffect(() => {
         getCurrentUserData(setPlayerHeadlineData);
@@ -70,7 +84,18 @@ const Dashboard = props => {
         }
     }, [playerHeadlineData]);
 
+    useEffect(() => {
+        if(playerHeadlineData.userData) {
+            getCityBuildingProgress(playerHeadlineData.userData.id, playerHeadlineData.userData.currentCityId, setBuildingProgressData);
+        } else if(playerHeadlineData.error) {
+            setBuildingProgressData({
+                error: "Error when fetching building progress."
+            })
+        }
+    }, [playerHeadlineData]);
+
     const cityUnitsPanel = <CityUnitsPanel cityUnitsData={cityUnitsData.cityUnitsData} error={cityUnitsData.error} />;
+    const buildingProgressPanel = <BuildingProgressPanel buildingProgressData={buildingProgressData.buildingProgressData} error={buildingProgressData.error} />;
     return (
         <div className="Dashboard">
             <div className="header">
@@ -79,6 +104,7 @@ const Dashboard = props => {
             </div>
             <div className="content">
                 <DashboardPanel panel={cityUnitsPanel} name="UNITS IN CITY" />
+                <DashboardPanel panel={buildingProgressPanel} name="BUILDING PROGRESS" />
             </div>
         </div>
     );

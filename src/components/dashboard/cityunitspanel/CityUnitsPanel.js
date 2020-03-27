@@ -32,14 +32,11 @@ const CityUnitsPanel = props => {
             })
     }, {});
 
-    const buildingSections = Object.keys(sectionsGrouped).map(key => {
-
-        return {
+    const buildingSections = Object.keys(sectionsGrouped).map(key => ({
             key: key,
             buildingLabel: sectionsGrouped[key][0].unit.buildingLabel,
             units: sectionsGrouped[key].map(unitData => <NumberOfUnitsTile key={unitData.unit.key} unitData={unitData} />)
-        }
-    });
+        }));
     return (
         <div className="CityUnitsPanel">
             <DashboardPanelAccordion sections={buildingSections} />
