@@ -1,0 +1,38 @@
+@import '../../../styles/theme';
+
+.NumberOfSingleLevelUnits {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  border: 1px solid $black-color-100;
+  min-width: 30px;
+  font-weight: 500;
+  color: $primary-color-300;
+
+  &:first-child {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+  }
+  &:last-child {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+  }
+
+  .amount, .level {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+  }
+
+  .amount {
+    border-bottom: 1px solid $black-color-100;
+  }
+
+  &:nth-child(n + 2) {
+    border-left: 0;
+  }
+}

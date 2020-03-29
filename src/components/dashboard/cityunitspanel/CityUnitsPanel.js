@@ -4,7 +4,6 @@ import './CityUnitsPanel.scss';
 import LoadingError from "../../lodingerror/LoadingError";
 import Loader from "../../loader/Loader";
 import NumberOfUnitsTile from "./NumberOfUnitsTile";
-import DashboardPanelAccordion from "./DashboardPanelAccordion";
 
 const CityUnitsPanel = props => {
     const [loading, isLoading] = useState(true);
@@ -21,31 +20,28 @@ const CityUnitsPanel = props => {
         return <div className="CityHeadline"><Loader /></div>
     }
 
-    const sectionsGrouped = props.cityUnitsData.reduce((sections, unitData) => {
-        const currentValues = sections[unitData.unit.building] || [];
-        const newValues = [unitData];
-        const newValuesFiltered = newValues.filter((item) => currentValues.indexOf(item) < 0);
+    const unitTiles = props.cityUnitsData.map(data => <NumberOfUnitsTile key={data.unit.key} unit={data.unit} levelsData={data.levelsData}/>)
 
-        return Object.assign(sections,
-            {
-                [unitData.unit.building]: [...currentValues, ...newValuesFiltered]
-            })
-    }, {});
-
-    const buildingSections = Object.keys(sectionsGrouped).map(key => ({
-            key: key,
-            buildingLabel: sectionsGrouped[key][0].unit.buildingLabel,
-            units: sectionsGrouped[key].map(unitData => <NumberOfUnitsTile key={unitData.unit.key} unitData={unitData} />)
-        }));
     return (
         <div className="CityUnitsPanel">
-            <DashboardPanelAccordion sections={buildingSections} />
+            {unitTiles}
         </div>
     );
 };
 
 CityUnitsPanel.propTypes = {
-    cityUnitsData: PropTypes.array,
+    cityUnitsData: PropTypes.arrayOf(PropTypes.shape({
+        unit: PropTypes.shape({
+            key: PropTypes.string.isRequired,
+            label: PropTypes.string.isRequired,
+            building: PropTypes.string.isRequired,
+            buildingLabel: PropTypes.string.isRequired
+        }),
+        levelsData: PropTypes.arrayOf(PropTypes.shape({
+            level: PropTypes.number,
+            amountInCity: PropTypes.number
+        }))
+    })),
     error: PropTypes.string
 };
 

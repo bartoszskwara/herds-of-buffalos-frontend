@@ -1,3 +1,11 @@
-.BuildingProgressPanel {
+@import '../../../styles/theme';
 
+.BuildingProgressPanel {
+  background: $accent-color-100;
+
+  .no-buildings {
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+  }
 }

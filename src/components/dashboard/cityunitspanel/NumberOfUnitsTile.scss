@@ -2,57 +2,48 @@
 
 .NumberOfUnitsTile {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
   padding: 5px;
+  background: $accent-color-100;
+  border-bottom: 1px solid $black-color-50;
 
-  .unit-level-data {
+  .icon {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    margin: 5px 0;
+    justify-content: center;
+    background: $accent-color-300;
+    border: 3px double $accent-color-100;
+    border-radius: 2px;
+    width: 30px;
+    height: 30px;
+    padding: 10px;
+  }
 
-    .unit-symbol {
-      position: relative;
+  .levels-data-box {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 0 10px;
+
+    .levels-data {
       display: flex;
-      align-items: center;
-      padding: 10px;
-      border: 3px double $primary-color-300;
-      border-radius: 50%;
-
-      .level-badge {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        background: $primary-color-300;
-        color: $accent-color-100;
-        font-size: 10px;
-        width: 18px;
-        height: 18px;
-        text-align: center;
-        border-radius: 50%;
-        font-family: Tahoma;
-        font-weight: bold;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+      flex-direction: row;
     }
+  }
 
-    .unit-amount {
-      font-size: 18px;
-      margin-left: 20px;
-      p {
-        margin: 0;
-        padding: 0;
-        font-size: 25px;
-      }
-    }
+  .total-amount-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    font-size: 20px;
+    border-left: 1px solid $black-color-100;
+    min-width: 30px;
+
   }
 
 
 
-  &:nth-child(even) {
-    background: $accent-color-200;
-  }
 }

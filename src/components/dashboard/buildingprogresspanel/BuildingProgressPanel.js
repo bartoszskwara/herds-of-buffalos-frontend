@@ -21,10 +21,14 @@ const BuildingProgressPanel = props => {
         return <div className="BuildingProgressPanel"><Loader /></div>
     }
 
-    const buildingProgressList = props.buildingProgressData.map(data => <BuildingProgress key={data.building} progressData={data}/>)
-
-    console.log(buildingProgressList);
-
+    const buildingProgressList = props.buildingProgressData.map(data => <BuildingProgress key={data.building} progressData={data}/>);
+    if(Array.isArray(buildingProgressList) && buildingProgressList.length === 0) {
+        return (
+            <div className="BuildingProgressPanel">
+                <p className="no-buildings">No buildings in progress</p>
+            </div>
+        )
+    }
     return (
         <div className="BuildingProgressPanel">
             {buildingProgressList}
