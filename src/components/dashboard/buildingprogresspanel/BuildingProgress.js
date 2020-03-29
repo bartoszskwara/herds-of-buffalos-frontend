@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './BuildingProgress.scss';
 import {buildingIcons} from "../../../static/BuildingIcons";
+import ProgressTile from "../common/ProgressTile";
 
 const BuildingProgress = props => {
     const buildingIconData = buildingIcons[props.progressData.building] || buildingIcons.unknown;
@@ -10,33 +10,21 @@ const BuildingProgress = props => {
         { width: "30px", height: "30px" }
     );
 
-    return (
-        <div className="BuildingProgress">
-            <div className="building-icon">
-                {buildingIcon}
-            </div>
-            <div className="progress-box">
-                <div className="building-name">
-                    <p>{props.progressData.label} <span className="level">&ndash; level {props.progressData.nextLevel}</span></p>
-                </div>
-                <div className="progress-bar-box">
-                    <div className="progress-bar" style={{width: `${props.progressData.progress}%`}}>
-                        <p>{props.progressData.progress}%</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+    return <ProgressTile
+        label={<span>{props.progressData.label} <span className="level">&ndash; level {props.progressData.nextLevel}</span></span> }
+        remainingTime={props.duration}
+        taskDuration={props.progressData.buildingTime}
+        icon={buildingIcon} />
 };
 
 BuildingProgress.propTypes = {
     progressData: PropTypes.shape({
         building: PropTypes.string.isRequired,
         label: PropTypes.string.isRequired,
-        currentLevel: PropTypes.number,
         nextLevel: PropTypes.number.isRequired,
-        progress: PropTypes.number.isRequired
-    })
+        buildingTime: PropTypes.number.isRequired,
+    }),
+    duration: PropTypes.object.isRequired
 };
 
 export default BuildingProgress;

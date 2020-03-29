@@ -3,15 +3,43 @@ import PropTypes from 'prop-types';
 import './BuildingProgressPanel.scss';
 import LoadingError from "../../lodingerror/LoadingError";
 import Loader from "../../loader/Loader";
-import {buildingIcons} from "../../../static/BuildingIcons";
 import BuildingProgress from "./BuildingProgress";
+import moment from "moment";
 
 const BuildingProgressPanel = props => {
     const [loading, isLoading] = useState(true);
+    const [timeLeft, setTimeLeft] = useState([]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTimeLeft(() => {
+                return timeLeft.map(t => {
+                    const newDuration = t.active ? t.duration.subtract(1, 's') : t.duration;
+                    return {
+                        ...t,
+                        duration: newDuration.asMilliseconds() < 0 ? moment.duration(0) : newDuration,
+                        active: newDuration.asMilliseconds() > 0
+                    }
+                });
+            });
+        }, 1000);
+        return () => clearTimeout(interval);
+    }, []);
 
     useEffect(() => {
         if(props.buildingProgressData) {
             isLoading(false);
+            props.buildingProgressData.forEach(data => {
+                const duration = moment.duration(moment(data.endDate).diff(moment()));
+                setTimeLeft(() => {
+                    timeLeft.push({
+                        building: data.building,
+                        duration: duration,
+                        active: duration.asMilliseconds() > 0
+                    });
+                    return timeLeft;
+                });
+            });
         }
     }, [props.buildingProgressData]);
 
@@ -21,7 +49,13 @@ const BuildingProgressPanel = props => {
         return <div className="BuildingProgressPanel"><Loader /></div>
     }
 
-    const buildingProgressList = props.buildingProgressData.map(data => <BuildingProgress key={data.building} progressData={data}/>);
+    const buildingProgressList = props.buildingProgressData.filter(data => {
+        const countDownData = timeLeft.find(t => t.building === data.building) || {};
+        return countDownData.active;
+    }).map(data => {
+        const countDownData = timeLeft.find(t => t.building === data.building) || {};
+        return (<BuildingProgress key={data.building} progressData={data} duration={countDownData.duration}/>);
+    });
     if(Array.isArray(buildingProgressList) && buildingProgressList.length === 0) {
         return (
             <div className="BuildingProgressPanel">
@@ -42,7 +76,9 @@ BuildingProgressPanel.propTypes = {
         label: PropTypes.string.isRequired,
         currentLevel: PropTypes.number,
         nextLevel: PropTypes.number.isRequired,
-        progress: PropTypes.number.isRequired
+        progress: PropTypes.number.isRequired,
+        buildingTime: PropTypes.number.isRequired,
+        endDate: PropTypes.number.isRequired
     })),
 };
 
