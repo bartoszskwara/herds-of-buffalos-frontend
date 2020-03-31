@@ -2,21 +2,16 @@ import React from 'react';
 import './Button.scss';
 import PropTypes from 'prop-types';
 
-class Button extends React.Component {
+const Button = (props) => {
+    return (
+        <div className="Button">
+            <button onClick={props.onClick}>{props.value}</button>
+        </div>
+    )
+};
 
-    static propTypes = {
-        value: PropTypes.string
-    };
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <button>{this.props.value}</button>
-        );
-    }
-}
-
+Button.propTypes = {
+    value: PropTypes.string,
+    onClick: PropTypes.func
+};
 export default Button;

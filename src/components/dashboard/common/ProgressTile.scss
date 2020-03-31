@@ -5,20 +5,24 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: stretch;
+    align-items: center;
     justify-content: center;
     border-bottom: 1px solid $black-color-100;
     padding: 10px 10px;
+    background: $accent-color-100;
+    box-sizing: border-box;
+    height: 80px;
 
     &:nth-child(even) {
-        background: $accent-color-150;
-    }
+         background: $accent-color-150;
+     }
 
     &:last-child {
-        border-bottom: 0;
+        border-bottom: 1px solid $black-color-100;
     }
 
-    .icon {
+    .icon-wrapper {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -28,6 +32,25 @@
         padding: 10px;
         width: 30px;
         height: 30px;
+
+        .icon-badge-wrapper {
+            background: $accent-color-100;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            border-left: 1px solid $accent-color-100;
+            border-top: 1px solid $accent-color-100;
+
+            .icon-badge {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 16px;
+                height: 16px;
+            }
+        }
     }
 
     .progress-box {

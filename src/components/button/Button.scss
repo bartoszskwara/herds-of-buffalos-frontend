@@ -1,0 +1,24 @@
+@import '../../styles/theme';
+
+.Button {
+  display: flex;
+
+  button {
+    flex: 1;
+    background: $primary-color-200;
+    color: $accent-color-200;
+    font-weight: 500;
+    font-size: 15px;
+    font-family: Khand, sans-serif;
+    border: 0;
+    margin: 0;
+    padding: 10px;
+    &:hover {
+      cursor: pointer;
+      background: $primary-color-100;
+    }
+    &:active {
+      background: $primary-color-300;
+    }
+  }
+}

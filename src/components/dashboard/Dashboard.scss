@@ -2,8 +2,32 @@
 
 .Dashboard {
   background: $accent-color-300;
+  display: flex;
+  flex-direction: column;
 
-  .header, .content {
+  .content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex: 1 1;
+
+    .main-content {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: center;
+      flex-grow: 1;
+    }
+
+    .right-panel {
+      height: 100%;
+      display: flex;
+    }
+  }
+
+  .header {
     display: flex;
     flex-wrap: wrap;
   }

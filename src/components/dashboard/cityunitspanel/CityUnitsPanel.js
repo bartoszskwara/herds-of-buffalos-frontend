@@ -4,23 +4,44 @@ import './CityUnitsPanel.scss';
 import LoadingError from "../../lodingerror/LoadingError";
 import Loader from "../../loader/Loader";
 import NumberOfUnitsTile from "./NumberOfUnitsTile";
+import {Api, apiCall} from "../../../api/Api";
+
+const getAllCityUnits = (userId, cityId, setCityUnitsData) => {
+    apiCall(Api.cityUnit.getAllCityUnits, { pathVariables: { userId, cityId } })
+        .then(response => {
+            setCityUnitsData({
+                cityUnitsData: response.data.content
+            })
+        })
+        .catch(error => setCityUnitsData({
+            error: "Error when fetching city units data."
+        }));
+};
 
 const CityUnitsPanel = props => {
     const [loading, isLoading] = useState(true);
+    const [cityUnitsData, setCityUnitsData] = useState({});
+    useEffect(() => {
+        if(props.currentUserData.userData) {
+            getAllCityUnits(props.currentUserData.userData.id, props.currentUserData.userData.currentCityId, setCityUnitsData);
+        } else if(props.currentUserData.error) {
+            setCityUnitsData({error: "Error when fetching city units data."})
+        }
+    }, [props.currentUserData]);
 
     useEffect(() => {
-        if(props.cityUnitsData) {
+        if(cityUnitsData.cityUnitsData) {
             isLoading(false);
         }
-    }, [props.cityUnitsData]);
+    }, [cityUnitsData.cityUnitsData]);
 
-    if(props.error) {
-        return <div className="CityHeadline"><LoadingError error={props.error} /></div>
+    if(cityUnitsData.error) {
+        return <div className="CityUnitsPanel"><LoadingError error={cityUnitsData.error} /></div>
     } else if(loading) {
-        return <div className="CityHeadline"><Loader /></div>
+        return <div className="CityUnitsPanel"><Loader /></div>
     }
 
-    const unitTiles = props.cityUnitsData.map(data => <NumberOfUnitsTile key={data.unit.key} unit={data.unit} levelsData={data.levelsData}/>)
+    const unitTiles = cityUnitsData.cityUnitsData.map(data => <NumberOfUnitsTile key={data.unit.key} unit={data.unit} levelsData={data.levelsData}/>);
 
     return (
         <div className="CityUnitsPanel">
@@ -30,19 +51,10 @@ const CityUnitsPanel = props => {
 };
 
 CityUnitsPanel.propTypes = {
-    cityUnitsData: PropTypes.arrayOf(PropTypes.shape({
-        unit: PropTypes.shape({
-            key: PropTypes.string.isRequired,
-            label: PropTypes.string.isRequired,
-            building: PropTypes.string.isRequired,
-            buildingLabel: PropTypes.string.isRequired
-        }),
-        levelsData: PropTypes.arrayOf(PropTypes.shape({
-            level: PropTypes.number,
-            amountInCity: PropTypes.number
-        }))
-    })),
-    error: PropTypes.string
+    currentUserData: PropTypes.shape({
+        id: PropTypes.number,
+        currentCityId: PropTypes.number
+    })
 };
 
 export default CityUnitsPanel;

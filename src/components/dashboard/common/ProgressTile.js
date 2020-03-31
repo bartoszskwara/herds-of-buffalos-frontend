@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './ProgressTile.scss';
 import moment from "moment";
+import {convertToRomanian} from "./romanianNumber";
+import {levelColorsRGB} from "../../../static/Unit";
 
 const createTimeString = (duration) => {
     if(!duration) {
@@ -42,8 +44,12 @@ const ProgressTile = props => {
 
     return (
         <div className="ProgressTile">
-            <div className="icon">
+            <div className="icon-wrapper">
                 {icon}
+                {props.iconLevel &&
+                    <div className="icon-badge-wrapper">
+                        <div className="icon-badge" style={{background: `rgba(${levelColorsRGB[props.iconLevel]},0.3)`}}>{convertToRomanian(props.iconLevel)}</div>
+                    </div>}
             </div>
             <div className="progress-box">
                 <div className="label">
@@ -63,7 +69,8 @@ ProgressTile.propTypes = {
     remainingTime: PropTypes.object.isRequired,
     taskDuration: PropTypes.number.isRequired,
     icon: PropTypes.node.isRequired,
-    label: PropTypes.node.isRequired
+    label: PropTypes.node.isRequired,
+    iconLevel: PropTypes.number
 };
 
 export default ProgressTile;

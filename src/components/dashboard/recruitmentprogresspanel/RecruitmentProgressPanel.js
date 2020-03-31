@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import './BuildingProgressPanel.scss';
+import './RecruitmentProgressPanel.scss';
 import LoadingError from "../../lodingerror/LoadingError";
 import Loader from "../../loader/Loader";
-import BuildingProgress from "./BuildingProgress";
+import RecruitmentProgress from "./RecruitmentProgress";
 import moment from "moment";
 
-const BuildingProgressPanel = props => {
+const RecruitmentProgressPanel = props => {
     const [loading, isLoading] = useState(true);
     const [timeLeft, setTimeLeft] = useState([]);
 
@@ -27,13 +27,13 @@ const BuildingProgressPanel = props => {
     }, []);
 
     useEffect(() => {
-        if(props.buildingProgressData) {
+        if(props.recruitmentProgressData) {
             isLoading(false);
-            props.buildingProgressData.forEach(data => {
+            props.recruitmentProgressData.forEach(data => {
                 const duration = moment.duration(moment(data.endDate).diff(moment()));
                 setTimeLeft(timeLeft => {
                     timeLeft.push({
-                        building: data.building,
+                        unit: data.unit,
                         duration: duration,
                         active: duration.asMilliseconds() > 0
                     });
@@ -41,46 +41,45 @@ const BuildingProgressPanel = props => {
                 });
             });
         }
-    }, [props.buildingProgressData]);
+    }, [props.recruitmentProgressData]);
 
     if(props.error) {
-        return <div className="BuildingProgressPanel"><LoadingError error={props.error} /></div>
+        return <div className="RecruitmentProgressPanel"><LoadingError error={props.error} /></div>
     } else if(loading) {
-        return <div className="BuildingProgressPanel"><Loader /></div>
+        return <div className="RecruitmentProgressPanel"><Loader /></div>
     }
 
-    const buildingProgressList = props.buildingProgressData.filter(data => {
-        const countDownData = timeLeft.find(t => t.building === data.building) || {};
+    const recruitmentProgressList = props.recruitmentProgressData.filter(data => {
+        const countDownData = timeLeft.find(t => t.unit === data.unit) || {};
         return countDownData.active;
     }).map(data => {
-        const countDownData = timeLeft.find(t => t.building === data.building) || {};
-        return (<BuildingProgress key={data.building} progressData={data} duration={countDownData.duration}/>);
+        const countDownData = timeLeft.find(t => t.unit === data.unit) || {};
+        return (<RecruitmentProgress key={data.unit} progressData={data} duration={countDownData.duration}/>);
     });
 
-    if(Array.isArray(buildingProgressList) && buildingProgressList.length === 0) {
+    if(Array.isArray(recruitmentProgressList) && recruitmentProgressList.length === 0) {
         return (
-            <div className="BuildingProgressPanel">
-                <p className="no-buildings">No buildings in progress</p>
+            <div className="RecruitmentProgressPanel">
+                <p className="no-recruitments">No recruitments in progress</p>
             </div>
         )
     }
     return (
-        <div className="BuildingProgressPanel">
-            {buildingProgressList}
+        <div className="RecruitmentProgressPanel">
+            {recruitmentProgressList}
         </div>
     );
 };
 
-BuildingProgressPanel.propTypes = {
-    buildingProgressData: PropTypes.arrayOf(PropTypes.shape({
-        building: PropTypes.string.isRequired,
+RecruitmentProgressPanel.propTypes = {
+    recruitmentProgressData: PropTypes.arrayOf(PropTypes.shape({
+        unit: PropTypes.string.isRequired,
+        unitLevel: PropTypes.number.isRequired,
         label: PropTypes.string.isRequired,
-        currentLevel: PropTypes.number,
-        nextLevel: PropTypes.number.isRequired,
-        progress: PropTypes.number.isRequired,
-        buildingTime: PropTypes.number.isRequired,
+        amount: PropTypes.number.isRequired,
+        recruitmentTime: PropTypes.number.isRequired,
         endDate: PropTypes.number.isRequired
     })),
 };
 
-export default BuildingProgressPanel;
+export default RecruitmentProgressPanel;

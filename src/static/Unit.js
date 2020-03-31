@@ -17,7 +17,15 @@ import { ReactComponent as Crusier } from '../images/unit/crusier.svg';
 import { ReactComponent as Sailboat } from '../images/unit/sailboat.svg';
 import { ReactComponent as Frigate } from '../images/unit/frigate.svg';
 
-export const unitIcons = {
+export const levelColorsRGB = {
+    1: "119, 186, 154",
+    2: "119, 170, 186",
+    3: "186, 159, 119",
+    4: "186, 130, 119",
+    5: "149, 119, 186",
+};
+
+export const unit = {
     stormTrooper: {
         key: "stormTrooper",
         icon: <Rifle className="unit-icon-svg" />

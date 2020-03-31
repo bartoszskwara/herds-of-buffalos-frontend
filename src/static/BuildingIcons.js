@@ -5,6 +5,8 @@ import { ReactComponent as Ironworks } from '../images/building/ironworks.svg';
 import { ReactComponent as Fountain } from '../images/building/fountain.svg';
 import { ReactComponent as Granary } from '../images/building/granary.svg';
 import { ReactComponent as Brickyard } from '../images/building/brickyard.svg';
+import { ReactComponent as TownHall } from '../images/building/townhall.svg';
+import { ReactComponent as Sawmill } from '../images/building/sawmill.svg';
 import { ReactComponent as Unknown } from '../images/unknown.svg';
 
 export const buildingIcons = {
@@ -31,6 +33,14 @@ export const buildingIcons = {
     ironworks: {
         key: "ironworks",
         icon: <Ironworks className="unit-icon-svg" />
+    },
+    townHall: {
+        key: "townHall",
+        icon: <TownHall className="unit-icon-svg" />
+    },
+    sawmill: {
+        key: "sawmill",
+        icon: <Sawmill className="unit-icon-svg" />
     },
     unknown: {
         key: "unknown",

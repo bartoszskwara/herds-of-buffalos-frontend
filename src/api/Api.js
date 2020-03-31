@@ -38,6 +38,10 @@ export const Api = {
         getAllCityUnits: {
             url: "/user/{userId}/city/{cityId}/unit",
             method: "get"
+        },
+        getCityRecruitmentProgress: {
+            url: "/user/{userId}/city/{cityId}/unit/progress",
+            method: "get"
         }
     },
     cityBuilding: {
