@@ -26,17 +26,4 @@
       display: flex;
     }
   }
-
-  .header {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .PlayerHeadline, .CityHeadline {
-    min-height: 70px;
-  }
-
-  .CityHeadline{
-    flex: 1;
-  }
 }

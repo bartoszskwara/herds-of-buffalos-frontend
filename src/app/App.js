@@ -11,6 +11,8 @@ import {menuItemsLeftPanel, menuItemsTopPanel} from "../static/MenuIcons";
 import DashboardPanel from "../components/dashboard/common/DashboardPanel";
 import {Api, apiCall} from "../api/Api";
 import CityUnitsPanel from "../components/dashboard/cityunitspanel/CityUnitsPanel";
+import PlayerHeadline from "../components/dashboard/PlayerHeadline";
+import CityHeadline from "../components/dashboard/CityHeadline";
 
 const getCurrentUserData = setCurrentUserData => {
     apiCall(Api.user.getCurrentUser)
@@ -22,11 +24,32 @@ const getCurrentUserData = setCurrentUserData => {
         }));
 };
 
+const getCityByCityIdAndUserId = (userId, cityId, setCityHeadlineData) => {
+    apiCall(Api.city.getCityByCityIdAndUserId, { pathVariables: { userId, cityId } })
+        .then(response => {
+            setCityHeadlineData({
+                cityData: response.data
+            })
+        })
+        .catch(error => setCityHeadlineData({
+            error: "Error when fetching current city data."
+        }));
+};
+
 const App = (props) => {
     const [currentUserData, setCurrentUserData] = useState({});
+    const [cityHeadlineData, setCityHeadlineData] = useState({});
+
     useEffect(() => {
         getCurrentUserData(setCurrentUserData);
     }, []);
+    useEffect(() => {
+        if(currentUserData.userData) {
+            getCityByCityIdAndUserId(currentUserData.userData.id, currentUserData.userData.currentCityId, setCityHeadlineData);
+        } else if(currentUserData.error) {
+            setCityHeadlineData({error: "Error when fetching current city data."});
+        }
+    }, [currentUserData]);
 
     return (
         <BrowserRouter>
@@ -37,6 +60,10 @@ const App = (props) => {
                 </div>
                 <div className="column right">
                     <TopPanel menuItems={menuItemsTopPanel}/>
+                    <div className="header">
+                        <PlayerHeadline userData={currentUserData.userData} error={currentUserData.error} />
+                        <CityHeadline cityData={cityHeadlineData.cityData} error={cityHeadlineData.error} />
+                    </div>
                     <Switch>
                         <Route exact path="/" render={(props) => <Dashboard {...props} currentUserData={currentUserData} />} />
                         <Route path="/home" component={Test} />
