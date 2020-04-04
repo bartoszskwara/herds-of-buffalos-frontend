@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './NumberOfUnitsTile.scss';
 import './NumberOfSingleLevelUnits.scss';
-import {unit} from "../../../static/Unit";
+import {unitIcons} from "../../../static/Unit";
 import NumberOfSingleLevelUnits from "./NumberOfSingleLevelUnits";
 
 const NumberOfUnitsTile = props => {
-    const unitIconData = unit[props.unit.key] || unit.unknown;
+    const unitIconData = unitIcons[props.unit.key] || unitIcons.unknown;
     const unitIcon = React.cloneElement(
         unitIconData.icon,
         { width: "30px", height: "30px" }

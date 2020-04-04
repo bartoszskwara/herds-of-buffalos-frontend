@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {unit} from "../../../static/Unit";
+import {unitIcons} from "../../../static/Unit";
 import ProgressTile from "../common/ProgressTile";
 
 const RecruitmentProgress = props => {
-    const unitIconData = unit[props.progressData.unit] || unit.unknown;
+    const unitIconData = unitIcons[props.progressData.unit] || unitIcons.unknown;
     const unitIcon = React.cloneElement(
         unitIconData.icon,
         { width: "30px", height: "30px" }

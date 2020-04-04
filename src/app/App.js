@@ -13,16 +13,10 @@ import {Api, apiCall} from "../api/Api";
 import CityUnitsPanel from "../components/dashboard/cityunitspanel/CityUnitsPanel";
 import PlayerHeadline from "../components/dashboard/PlayerHeadline";
 import CityHeadline from "../components/dashboard/CityHeadline";
+import Building from "../components/Building/Building";
+import LoadingError from "../components/lodingerror/LoadingError";
+import Loader from "../components/loader/Loader";
 
-const getCurrentUserData = setCurrentUserData => {
-    apiCall(Api.user.getCurrentUser)
-        .then(response => setCurrentUserData({
-            userData: response.data
-        }))
-        .catch(error => setCurrentUserData({
-            error: "Error when fetching current user data."
-        }));
-};
 
 const getCityByCityIdAndUserId = (userId, cityId, setCityHeadlineData) => {
     apiCall(Api.city.getCityByCityIdAndUserId, { pathVariables: { userId, cityId } })
@@ -39,10 +33,30 @@ const getCityByCityIdAndUserId = (userId, cityId, setCityHeadlineData) => {
 const App = (props) => {
     const [currentUserData, setCurrentUserData] = useState({});
     const [cityHeadlineData, setCityHeadlineData] = useState({});
+    const [loading, isLoading] = useState(true);
+
+    const getCurrentUserData = setCurrentUserData => {
+        apiCall(Api.user.getCurrentUser)
+            .then(response => {
+                setCurrentUserData({
+                    userData: response.data
+                });
+            })
+            .catch(error => setCurrentUserData({
+                error: "Error when fetching current user data."
+            }));
+    };
 
     useEffect(() => {
         getCurrentUserData(setCurrentUserData);
     }, []);
+
+    useEffect(() => {
+        if(currentUserData.userData) {
+            isLoading(false);
+        }
+    }, [currentUserData]);
+
     useEffect(() => {
         if(currentUserData.userData) {
             getCityByCityIdAndUserId(currentUserData.userData.id, currentUserData.userData.currentCityId, setCityHeadlineData);
@@ -50,6 +64,12 @@ const App = (props) => {
             setCityHeadlineData({error: "Error when fetching current city data."});
         }
     }, [currentUserData]);
+
+    if(currentUserData.error) {
+        return <div className="CityHeadline"><LoadingError error={currentUserData.error} /></div>
+    } else if(loading) {
+        return <div className="CityHeadline"><Loader /></div>
+    }
 
     return (
         <BrowserRouter>
@@ -70,7 +90,7 @@ const App = (props) => {
                         <Route path="/map" component={Test} />
                         <Route path="/herd" component={Test} />
                         <Route path="/ranking" component={Test} />
-                        <Route path="/buildings" component={Test} />
+                        <Route path="/building/:building" render={(props) => <Building {...props} currentUserData={currentUserData.userData} />} />
                         <Route path="/calendar" component={Test} />
                         <Route path="/settings" component={Test} />
                         <Route path="/tasks" component={Test} />

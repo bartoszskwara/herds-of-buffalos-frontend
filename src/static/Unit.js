@@ -25,7 +25,7 @@ export const levelColorsRGB = {
     5: "149, 119, 186",
 };
 
-export const unit = {
+export const unitIcons = {
     stormTrooper: {
         key: "stormTrooper",
         icon: <Rifle className="unit-icon-svg" />

@@ -8,7 +8,7 @@ const DashboardPanel = props => {
         <div className="DashboardPanel">
             {props.name && <div className="panel-name">{props.name}</div>}
             <div className="panel-content">{props.panel}</div>
-            <div><Button value={props.buttonLabel} /></div>
+            { !!props.buttonLabel && <div><Button value={props.buttonLabel} /></div> }
         </div>
     );
 };

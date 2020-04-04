@@ -1,0 +1,138 @@
+@import '../../../styles/theme';
+
+$border-double: 3px double $accent-color-100;
+
+.UnitRecruitment {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-bottom: 1px solid $black-color-100;
+  padding: 5px;
+  position: relative;
+
+  .unit-disabled {
+    background: rgba(255, 255, 255, 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .unit-info-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $accent-color-300;
+    border: $border-double;
+    border-radius: 2px;
+    width: 70px;
+    height: 70px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .level {
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    min-width: 40px;
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: $border-double;
+    border-radius: 2px;
+  }
+
+  .skills, .cost {
+    min-width: 120px;
+    margin: 0 20px;
+  }
+
+  .skills-cost-box {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    background: $accent-color-300;
+    border: $border-double;
+    border-radius: 2px;
+  }
+
+  .action-box {
+    box-sizing: border-box;
+    background: $accent-color-300;
+    border: $border-double;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex: 1;
+    padding: 10px;
+    min-height: 70px;
+  }
+
+  .recruitment-input, .upgrade-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+
+    p {
+      min-width: 50px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    input {
+      margin: 0 10px;
+      padding: 5px;
+      width: 50px;
+      font-size: 18px;
+      border: 1px solid $black-color-100;
+      text-align: center;
+    }
+    .Button {
+      flex: 1;
+      margin: 0 10px;
+    }
+  }
+
+  .TableWithIcons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 2px;
+    box-sizing: border-box;
+    padding: 5px;
+
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      &:nth-child(even) {
+        margin: 0 5px;
+      }
+      .item-value {
+        font-size: 18px;
+        font-weight: 500;
+
+      }
+      .item-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+  }
+}
