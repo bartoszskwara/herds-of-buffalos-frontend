@@ -1,44 +1,36 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './RecruitmentProgressPanel.scss';
-import LoadingError from "../../lodingerror/LoadingError";
+import LoadingError from "../../error/LoadingError";
 import Loader from "../../loader/Loader";
 import RecruitmentProgress from "./RecruitmentProgress";
 import moment from "moment";
 
 const RecruitmentProgressPanel = props => {
     const [loading, isLoading] = useState(true);
-    const [timeLeft, setTimeLeft] = useState([]);
+    const [timeLeft, setTimeLeft] = useState({});
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setTimeLeft(timeLeft => {
-                return timeLeft.map(t => {
-                    const newDuration = t.active ? t.duration.subtract(1, 's') : t.duration;
-                    return {
-                        ...t,
-                        duration: newDuration.asMilliseconds() < 0 ? moment.duration(0) : newDuration,
-                        active: newDuration.asMilliseconds() > 0
-                    }
+            const newDuration = timeLeft.active ? timeLeft.duration.subtract(1, 's') : timeLeft.duration;
+            setTimeLeft( {
+                    ...timeLeft,
+                    duration: newDuration.asMilliseconds() < 0 ? moment.duration(0) : newDuration,
+                    active: newDuration.asMilliseconds() > 0
                 });
-            });
-        }, 1000);
+            }, 1000);
         return () => clearTimeout(interval);
     }, []);
 
     useEffect(() => {
         if(props.recruitmentProgressData) {
             isLoading(false);
-            props.recruitmentProgressData.forEach(data => {
-                const duration = moment.duration(moment(data.endDate).diff(moment()));
-                setTimeLeft(timeLeft => {
-                    timeLeft.push({
-                        unit: data.unit,
-                        duration: duration,
-                        active: duration.asMilliseconds() > 0
-                    });
-                    return timeLeft;
-                });
+            const inProgressTask = props.recruitmentProgressData.find(data => data.status === "InProgress");
+            const duration = moment.duration(moment(inProgressTask.endDate).diff(moment()));
+            setTimeLeft({
+                id: inProgressTask.id,
+                duration: duration,
+                active: duration.asMilliseconds() > 0
             });
         }
     }, [props.recruitmentProgressData]);
@@ -50,11 +42,11 @@ const RecruitmentProgressPanel = props => {
     }
 
     const recruitmentProgressList = props.recruitmentProgressData.filter(data => {
-        const countDownData = timeLeft.find(t => t.unit === data.unit) || {};
+        const countDownData = data.id === timeLeft.id ? timeLeft : {};
         return countDownData.active;
     }).map(data => {
-        const countDownData = timeLeft.find(t => t.unit === data.unit) || {};
-        return (<RecruitmentProgress key={data.unit} progressData={data} duration={countDownData.duration}/>);
+        const countDownData = data.id === timeLeft.id ? timeLeft : {};
+        return (<RecruitmentProgress key={data.unit} progressData={data} duration={countDownData.duration} active={data.status === "InProgress"} />);
     });
 
     if(Array.isArray(recruitmentProgressList) && recruitmentProgressList.length === 0) {
@@ -73,11 +65,13 @@ const RecruitmentProgressPanel = props => {
 
 RecruitmentProgressPanel.propTypes = {
     recruitmentProgressData: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
         unit: PropTypes.string.isRequired,
         unitLevel: PropTypes.number.isRequired,
         label: PropTypes.string.isRequired,
         amount: PropTypes.number.isRequired,
-        recruitmentTime: PropTypes.number.isRequired,
+        taskDuration: PropTypes.number.isRequired,
+        status: PropTypes.string.isRequired,
         endDate: PropTypes.number.isRequired
     })),
 };

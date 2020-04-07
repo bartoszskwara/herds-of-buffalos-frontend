@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './PlayerHeadline.scss';
 import PropTypes from 'prop-types';
 import Loader from "../loader/Loader";
-import LoadingError from "../lodingerror/LoadingError";
+import LoadingError from "../error/LoadingError";
 
 const PlayerHeadline = props => {
     const [loading, isLoading] = useState(true);

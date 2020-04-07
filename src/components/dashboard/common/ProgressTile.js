@@ -40,7 +40,7 @@ const ProgressTile = props => {
         { width: "30px", height: "30px" }
     );
     const time = createTimeString(props.remainingTime);
-    const progressWidth = calculateProgressWidth(props.remainingTime, props.taskDuration);
+    const progressWidth = props.active ? calculateProgressWidth(props.remainingTime, props.taskDuration) : 0;
 
     return (
         <div className="ProgressTile">
@@ -56,9 +56,10 @@ const ProgressTile = props => {
                     <p>{props.label} <span className="time">&ndash; {time}</span></p>
                 </div>
                 <div className="progress-bar-box">
-                    <div className="progress-bar" style={{width: `${progressWidth}%`}}>
+                    {props.active && <div className="progress-bar" style={{width: `${progressWidth}%`}}>
                         <p>{Math.floor(progressWidth)}%</p>
-                    </div>
+                    </div>}
+                    {!props.active && <div>Pending...</div>}
                 </div>
             </div>
         </div>
@@ -66,11 +67,12 @@ const ProgressTile = props => {
 };
 
 ProgressTile.propTypes = {
-    remainingTime: PropTypes.object.isRequired,
-    taskDuration: PropTypes.number.isRequired,
+    remainingTime: PropTypes.object,
+    taskDuration: PropTypes.number,
     icon: PropTypes.node.isRequired,
     label: PropTypes.node.isRequired,
-    iconLevel: PropTypes.number
+    iconLevel: PropTypes.number,
+    active: PropTypes.bool
 };
 
 export default ProgressTile;

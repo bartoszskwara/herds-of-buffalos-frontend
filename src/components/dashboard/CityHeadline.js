@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './CityHeadline.scss';
 import Loader from "../loader/Loader";
-import LoadingError from "../lodingerror/LoadingError";
+import LoadingError from "../error/LoadingError";
+import {resourceIcons} from "../../static/Resources";
 
 
 const CityHeadline = props => {
@@ -20,6 +21,10 @@ const CityHeadline = props => {
         return <div className="CityHeadline"><Loader /></div>
     }
 
+    const woodIcon = React.cloneElement(resourceIcons.wood.icon, {width: "30px", height: "30px"});
+    const clayIcon = React.cloneElement(resourceIcons.clay.icon, {width: "30px", height: "30px"});
+    const ironIcon = React.cloneElement(resourceIcons.iron.icon, {width: "30px", height: "30px"});
+
     return (
         <div className="CityHeadline">
             <div className="city-header">
@@ -28,15 +33,15 @@ const CityHeadline = props => {
             <div className="resource-box">
                 <ul >
                     <li className="resource">
-                        <i className="fas fa-tree item"></i>
+                        <div className="resource-icon">{woodIcon}</div>
                         <div className="item resource-value">{props.cityData.resources.wood}</div>
                     </li>
                     <li className="resource">
-                        <i className="icofont-energy-oil item"></i>
+                        <div className="resource-icon">{clayIcon}</div>
                         <div className="item resource-value">{props.cityData.resources.clay}</div>
                     </li>
                     <li className="resource">
-                        <i className="icofont-wheat item"></i>
+                        <div className="resource-icon">{ironIcon}</div>
                         <div className="item resource-value">{props.cityData.resources.iron}</div>
                     </li>
                 </ul>

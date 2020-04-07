@@ -30,8 +30,6 @@ $border-double: 3px double $accent-color-100;
     align-items: center;
     justify-content: center;
     background: $accent-color-300;
-    border: $border-double;
-    border-radius: 2px;
     width: 70px;
     height: 70px;
     padding: 10px;
@@ -48,13 +46,30 @@ $border-double: 3px double $accent-color-100;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: $border-double;
-    border-radius: 2px;
   }
 
-  .skills, .cost {
-    min-width: 120px;
+  .unit-amount {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $accent-color-300;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    box-sizing: border-box;
+    min-height: 70px;
+    min-width: 65px;
+
+  }
+
+  .skills, .cost, .upgradeCost, .recruitment-input {
+    min-width: 135px;
     margin: 0 20px;
+  }
+
+  .box-with-border {
+    border: $border-double;
+    border-radius: 2px;
   }
 
   .skills-cost-box {
@@ -62,34 +77,40 @@ $border-double: 3px double $accent-color-100;
     display: flex;
     flex-direction: row;
     background: $accent-color-300;
-    border: $border-double;
-    border-radius: 2px;
   }
 
   .action-box {
     box-sizing: border-box;
     background: $accent-color-300;
-    border: $border-double;
-    border-radius: 2px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    flex: 1;
-    padding: 10px;
     min-height: 70px;
+    flex: 1;
   }
 
-  .recruitment-input, .upgrade-button {
+  .recruitment-input {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .recruitment-box, .upgrade-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     flex: 1;
 
     p {
       min-width: 50px;
       font-size: 18px;
-      font-weight: 500;
+      font-weight: 600;
+
+      &:hover {
+        color: $primary-color-100;
+        cursor: pointer;
+      }
     }
 
     input {
@@ -99,10 +120,14 @@ $border-double: 3px double $accent-color-100;
       font-size: 18px;
       border: 1px solid $black-color-100;
       text-align: center;
+
+
     }
+
     .Button {
       flex: 1;
       margin: 0 10px;
+      min-width: 90px;
     }
   }
 

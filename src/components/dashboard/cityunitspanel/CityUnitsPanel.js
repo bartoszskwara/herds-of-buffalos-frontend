@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './CityUnitsPanel.scss';
-import LoadingError from "../../lodingerror/LoadingError";
+import LoadingError from "../../error/LoadingError";
 import Loader from "../../loader/Loader";
 import NumberOfUnitsTile from "./NumberOfUnitsTile";
 import {Api, apiCall} from "../../../api/Api";

@@ -1,0 +1,20 @@
+@import '../../styles/theme';
+
+.UnexpectedError {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: $error-color-300;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+
+    p {
+        font-weight: 600;
+        font-size: 16px;
+        color: $accent-color-100;
+    }
+}

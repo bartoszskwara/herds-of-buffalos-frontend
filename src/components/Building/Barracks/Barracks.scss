@@ -2,19 +2,23 @@
 
 .Barracks {
   background: $accent-color-300;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 
   .content {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex: 1 1;
+    align-items: stretch;
+    justify-content: flex-end;
+
+    .right-panel {
+      background: $accent-color-100;
+      border-left: 1px solid $black-color-100;
+    }
 
     .main-content {
       flex: 1;
+
+      .recruitment-error {
+        position: relative;
+      }
 
       .building-name {
         text-align: center;
@@ -26,7 +30,7 @@
         background: $accent-color-200;
       }
     }
-    .building-dashboard{
+    .building-dashboard {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
@@ -35,9 +39,5 @@
       flex-grow: 1;
     }
 
-    .right-panel {
-      height: 100%;
-      display: flex;
-    }
   }
 }

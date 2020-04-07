@@ -46,9 +46,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      i {
-        font-size: 30px;
+      .resource-icon {
         margin: 0 15px 0 30px;
+        fill: $primary-color-300;
       }
 
       .item {

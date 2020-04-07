@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './BarracksTasksProgress.scss';
-import LoadingError from "../../lodingerror/LoadingError";
+import LoadingError from "../../error/LoadingError";
 import Loader from "../../loader/Loader";
 import UnitRecruitment from "./UnitRecruitment";
 
@@ -21,7 +21,14 @@ const BarracksRecruitmentPanel = props => {
     }
 
     const unitRecruitmentList = props.unitsInBuilding.units.reduce((resultList, unitData) => {
-        unitData.levelsData.forEach(levelData => resultList.push(<UnitRecruitment key={`${unitData.unit.key}-${levelData.level}`} unit={unitData.unit} level={levelData} maxLevel={unitData.maxLevel}/>));
+        unitData.levelsData.forEach(levelData => resultList.push(
+            <UnitRecruitment
+                key={`${unitData.unit.key}-${levelData.level}`}
+                unit={unitData.unit}
+                level={levelData}
+                maxLevel={unitData.maxLevel}
+                recruitUnits={props.recruitUnits}
+            />));
         return resultList;
     }, []);
 
@@ -33,7 +40,8 @@ const BarracksRecruitmentPanel = props => {
 };
 
 BarracksRecruitmentPanel.propTypes = {
-    unitsInBuilding: PropTypes.object
+    unitsInBuilding: PropTypes.object,
+    recruitUnits: PropTypes.func,
 };
 
 export default BarracksRecruitmentPanel;

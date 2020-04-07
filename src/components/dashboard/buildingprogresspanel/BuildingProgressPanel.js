@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './BuildingProgressPanel.scss';
-import LoadingError from "../../lodingerror/LoadingError";
+import LoadingError from "../../error/LoadingError";
 import Loader from "../../loader/Loader";
 import BuildingProgress from "./BuildingProgress";
 import moment from "moment";
@@ -54,7 +54,7 @@ const BuildingProgressPanel = props => {
         return countDownData.active;
     }).map(data => {
         const countDownData = timeLeft.find(t => t.building === data.building) || {};
-        return (<BuildingProgress key={data.building} progressData={data} duration={countDownData.duration}/>);
+        return (<BuildingProgress key={data.building} progressData={data} duration={countDownData.duration} active={data.status === "InProgress"} />);
     });
 
     if(Array.isArray(buildingProgressList) && buildingProgressList.length === 0) {
@@ -78,7 +78,8 @@ BuildingProgressPanel.propTypes = {
         currentLevel: PropTypes.number,
         nextLevel: PropTypes.number.isRequired,
         progress: PropTypes.number.isRequired,
-        buildingTime: PropTypes.number.isRequired,
+        taskDuration: PropTypes.number.isRequired,
+        status: PropTypes.string.isRequired,
         endDate: PropTypes.number.isRequired
     })),
 };

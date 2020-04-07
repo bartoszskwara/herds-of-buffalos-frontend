@@ -39,6 +39,10 @@ export const Api = {
             url: "/user/{userId}/city/{cityId}/unit",
             method: "get"
         },
+        recruitUnit: {
+            url: "/user/{userId}/city/{cityId}/unit",
+            method: "post"
+        },
         getCityRecruitmentProgress: {
             url: "/user/{userId}/city/{cityId}/unit/progress",
             method: "get"
@@ -50,7 +54,7 @@ export const Api = {
             method: "get"
         },
         getTasksProgress: {
-            url: "/user/{userId}/city/{cityId}/building/tasks",
+            url: "/user/{userId}/city/{cityId}/building/{building}/tasks",
             method: "get"
         },
         getAvailableUnits: {

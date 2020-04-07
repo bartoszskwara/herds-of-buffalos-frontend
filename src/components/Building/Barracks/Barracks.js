@@ -4,20 +4,22 @@ import './Barracks.scss';
 import RightDashboardPanel from "../../dashboard/common/RightDashboardPanel";
 import {Api, apiCall} from "../../../api/Api";
 import BarracksTasksProgress from "./BarracksTasksProgress";
-import LoadingError from "../../lodingerror/LoadingError";
+import LoadingError from "../../error/LoadingError";
 import Loader from "../../loader/Loader";
 import DashboardPanel from "../../dashboard/common/DashboardPanel";
 import BarracksRecruitmentPanel from "./BarracksRecruitmentPanel";
+import UnexpectedError from "../../error/UnexpectedError";
 
 const Barracks = props => {
     const [tasksData, setTasksData] = useState({});
     const [unitsInBuilding, setUnitsInBuilding] = useState({});
+    const [recruitmentError, setRecruitmentError] = useState(false);
 
     const fetchTasksProgress = () => {
-        apiCall(Api.cityBuilding.getTasksProgress, { pathVariables: { userId: props.userId, cityId: props.cityId } })
+        apiCall(Api.cityBuilding.getTasksProgress, { pathVariables: { building: "barracks", userId: props.userId, cityId: props.cityId } })
             .then(response => {
                 setTasksData({
-                    tasks: response.data
+                    tasks: response.data.content
                 });
             })
             .catch(error => {
@@ -41,6 +43,18 @@ const Barracks = props => {
             });
     };
 
+    const recruitUnits = (data = {}) => {
+        apiCall(Api.cityUnit.recruitUnit, { data, pathVariables: { userId: props.userId, cityId: props.cityId } })
+            .then(response => {
+                fetchTasksProgress();
+                fetchAvailableUnits();
+                setRecruitmentError(false);
+            })
+            .catch(error => {
+                setRecruitmentError(true);
+            });
+    };
+
     useEffect(() => {
         if(props.userId) {
             fetchTasksProgress();
@@ -48,13 +62,29 @@ const Barracks = props => {
         }
     }, [props.userId]);
 
-    const barracksTasksProgress = <BarracksTasksProgress tasksData={tasksData} />;
-    const barracksRecruitmentPanel = <BarracksRecruitmentPanel unitsInBuilding={unitsInBuilding} />;
+    useEffect(() => {
+        const timeout = null;
+        if(recruitmentError) {
+            setTimeout(() => {
+                setRecruitmentError(false);
+            }, 3000);
+        }
+        return clearTimeout(timeout);
+    }, [recruitmentError]);
+
+    const barracksTasksProgress = <BarracksTasksProgress tasksData={tasksData} fetchTasksProgress={fetchTasksProgress} />;
+    const barracksRecruitmentPanel = <BarracksRecruitmentPanel
+        unitsInBuilding={unitsInBuilding}
+        recruitUnits={recruitUnits}
+    />;
 
     return (
         <div className="Barracks">
             <div className="content">
                 <div className="main-content">
+                    <div className="recruitment-error">
+                        {recruitmentError && <UnexpectedError message="Recruitment request failed" />}
+                    </div>
                     <div className="building-name">BARRACKS</div>
                     <div className="building-dashboard">
                         <DashboardPanel panel={barracksRecruitmentPanel} name="RECRUITMENT" />

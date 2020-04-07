@@ -14,7 +14,7 @@ import CityUnitsPanel from "../components/dashboard/cityunitspanel/CityUnitsPane
 import PlayerHeadline from "../components/dashboard/PlayerHeadline";
 import CityHeadline from "../components/dashboard/CityHeadline";
 import Building from "../components/Building/Building";
-import LoadingError from "../components/lodingerror/LoadingError";
+import LoadingError from "../components/error/LoadingError";
 import Loader from "../components/loader/Loader";
 
 
