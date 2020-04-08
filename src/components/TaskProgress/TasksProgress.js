@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import './BarracksTasksProgress.scss';
-import LoadingError from "../../error/LoadingError";
-import Loader from "../../loader/Loader";
-import BuildingProgress from "../../dashboard/buildingprogresspanel/BuildingProgress";
-import RecruitmentProgress from "../../dashboard/recruitmentprogresspanel/RecruitmentProgress";
+import './TasksProgress.scss';
+import LoadingError from "../error/LoadingError";
+import Loader from "../loader/Loader";
+import BuildingProgress from "../TaskProgress/BuildingProgress";
+import RecruitmentProgress from "../TaskProgress/RecruitmentProgress";
 import moment from "moment";
 
-const BarracksTasksProgress = props => {
+const TasksProgress = props => {
     const [loading, isLoading] = useState(true);
     const [inProgressTasksTimeLeft, setInProgressTasksTimeLeft] = useState([]);
 
@@ -44,9 +44,9 @@ const BarracksTasksProgress = props => {
     }, [props.tasksData]);
 
     if(props.tasksData.error) {
-        return <div className="BarracksTasksProgress"><LoadingError error={props.tasksData.error} /></div>
+        return <div className="TasksProgress"><LoadingError error={props.tasksData.error} /></div>
     } else if(loading) {
-        return <div className="BarracksTasksProgress"><Loader /></div>
+        return <div className="TasksProgress"><Loader /></div>
     }
 
     const tasks = props.tasksData.tasks.map(task => {
@@ -58,13 +58,13 @@ const BarracksTasksProgress = props => {
     });
 
     return (
-        <div className="BarracksTasksProgress">
+        <div className="TasksProgress">
             {tasks}
         </div>
     );
 };
 
-BarracksTasksProgress.propTypes = {
+TasksProgress.propTypes = {
     tasksData: PropTypes.shape({
         tasks: PropTypes.arrayOf({
             id: PropTypes.number,
@@ -85,4 +85,4 @@ BarracksTasksProgress.propTypes = {
     fetchTasksProgress: PropTypes.func.isRequired
 };
 
-export default BarracksTasksProgress;
+export default TasksProgress;

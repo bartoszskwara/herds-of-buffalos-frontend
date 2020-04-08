@@ -13,7 +13,7 @@ import {Api, apiCall} from "../api/Api";
 import CityUnitsPanel from "../components/dashboard/cityunitspanel/CityUnitsPanel";
 import PlayerHeadline from "../components/dashboard/PlayerHeadline";
 import CityHeadline from "../components/dashboard/CityHeadline";
-import Building from "../components/Building/Building";
+import BuildingWrapper from "../components/Building/BuildingWrapper";
 import LoadingError from "../components/error/LoadingError";
 import Loader from "../components/loader/Loader";
 
@@ -90,7 +90,7 @@ const App = (props) => {
                         <Route path="/map" component={Test} />
                         <Route path="/herd" component={Test} />
                         <Route path="/ranking" component={Test} />
-                        <Route path="/building/:building" render={(props) => <Building {...props} currentUserData={currentUserData.userData} />} />
+                        <Route path="/building/:building" render={(props) => <BuildingWrapper {...props} currentUserData={currentUserData.userData} />} />
                         <Route path="/calendar" component={Test} />
                         <Route path="/settings" component={Test} />
                         <Route path="/tasks" component={Test} />

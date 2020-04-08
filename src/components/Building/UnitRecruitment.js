@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import './UnitRecruitment.scss';
-import {levelColorsRGB, unitIcons} from "../../../static/Unit";
-import {convertToRomanian} from "../../dashboard/common/romanianNumber";
-import {skillIcons} from "../../../static/Skills";
-import {resourceIcons} from "../../../static/Resources";
-import Button from "../../button/Button";
+import {levelColorsRGB, unitIcons} from "../../static/Unit";
+import {convertToRomanian} from "../dashboard/common/romanianNumber";
+import {skillIcons} from "../../static/Skills";
+import {resourceIcons} from "../../static/Resources";
+import Button from "../button/Button";
 
 const TableWithIcons = (props) => {
     const items = props.items.map(i => ({

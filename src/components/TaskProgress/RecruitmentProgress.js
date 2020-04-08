@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {unitIcons} from "../../../static/Unit";
-import ProgressTile from "../common/ProgressTile";
+import {unitIcons} from "../../static/Unit";
+import ProgressTile from "../dashboard/common/ProgressTile";
 
 const RecruitmentProgress = props => {
     const unitIconData = unitIcons[props.progressData.unit] || unitIcons.unknown;

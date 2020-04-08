@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {buildingIcons} from "../../../static/BuildingIcons";
-import ProgressTile from "../common/ProgressTile";
+import {buildingIcons} from "../../static/BuildingIcons";
+import ProgressTile from "../dashboard/common/ProgressTile";
 
 const BuildingProgress = props => {
     const buildingIconData = buildingIcons[props.progressData.building] || buildingIcons.unknown;

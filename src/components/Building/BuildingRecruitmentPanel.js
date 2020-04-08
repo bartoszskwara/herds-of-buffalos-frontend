@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import './BarracksTasksProgress.scss';
-import LoadingError from "../../error/LoadingError";
-import Loader from "../../loader/Loader";
+import '../TaskProgress/TasksProgress.scss';
+import LoadingError from "../error/LoadingError";
+import Loader from "../loader/Loader";
 import UnitRecruitment from "./UnitRecruitment";
 
-const BarracksRecruitmentPanel = props => {
+const BuildingRecruitmentPanel = props => {
     const [loading, isLoading] = useState(true);
 
     useEffect(() => {
@@ -15,9 +15,9 @@ const BarracksRecruitmentPanel = props => {
     }, [props.unitsInBuilding]);
 
     if(props.unitsInBuilding.error) {
-        return <div className="BarracksRecruitmentPanel"><LoadingError error={props.unitsInBuilding.error} /></div>
+        return <div className="BuildingRecruitmentPanel"><LoadingError error={props.unitsInBuilding.error} /></div>
     } else if(loading) {
-        return <div className="BarracksRecruitmentPanel"><Loader /></div>
+        return <div className="BuildingRecruitmentPanel"><Loader /></div>
     }
 
     const unitRecruitmentList = props.unitsInBuilding.units.reduce((resultList, unitData) => {
@@ -33,15 +33,15 @@ const BarracksRecruitmentPanel = props => {
     }, []);
 
     return (
-        <div className="BarracksRecruitmentPanel">
+        <div className="BuildingRecruitmentPanel">
             {unitRecruitmentList}
         </div>
     );
 };
 
-BarracksRecruitmentPanel.propTypes = {
+BuildingRecruitmentPanel.propTypes = {
     unitsInBuilding: PropTypes.object,
     recruitUnits: PropTypes.func,
 };
 
-export default BarracksRecruitmentPanel;
+export default BuildingRecruitmentPanel;

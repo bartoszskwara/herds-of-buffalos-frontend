@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import './Dashboard.scss';
-import PlayerHeadline from "./PlayerHeadline";
 import {Api, apiCall} from '../../api/Api'
-import CityHeadline from "./CityHeadline";
 import DashboardPanel from "./common/DashboardPanel";
-import BuildingProgressPanel from "./buildingprogresspanel/BuildingProgressPanel";
-import RecruitmentProgressPanel from "./recruitmentprogresspanel/RecruitmentProgressPanel";
 import PropTypes from 'prop-types';
 import CityUnitsPanel from "./cityunitspanel/CityUnitsPanel";
 import RightDashboardPanel from "./common/RightDashboardPanel";
+import TasksProgress from "../TaskProgress/TasksProgress";
 
 const getCityBuildingProgress = (userId, cityId, setBuildingProgressData) => {
     apiCall(Api.cityBuilding.getCityBuildingProgress, { pathVariables: { userId, cityId } })
@@ -80,8 +77,16 @@ const Dashboard = props => {
         }
     }, [recruitmentProgressData]);
 
-    const buildingProgressPanel = <BuildingProgressPanel buildingProgressData={progressData.buildingProgress.displayed} error={buildingProgressData.error} />;
-    const recruitmentProgressPanel = <RecruitmentProgressPanel recruitmentProgressData={progressData.recruitmentProgress.displayed} error={recruitmentProgressData.error} />;
+    const fetchTasksProgressBuilding = () => {
+        getCityBuildingProgress(props.currentUserData.userData.id, props.currentUserData.userData.currentCityId, setBuildingProgressData);
+    };
+
+    const fetchTasksProgressRecruitment = () => {
+        getCityRecruitmentProgress(props.currentUserData.userData.id, props.currentUserData.userData.currentCityId, setRecruitmentProgressData);
+    };
+
+    const buildingProgressPanel = <TasksProgress tasksData={ { tasks: progressData.buildingProgress.displayed, error: buildingProgressData.error} } fetchTasksProgress={fetchTasksProgressBuilding}/>;
+    const recruitmentProgressPanel = <TasksProgress tasksData={ { tasks: progressData.recruitmentProgress.displayed, error: recruitmentProgressData.error } } fetchTasksProgress={fetchTasksProgressRecruitment}/>;
     const cityUnitsPanel = <CityUnitsPanel currentUserData={props.currentUserData} />;
     return (
         <div className="Dashboard">
