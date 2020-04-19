@@ -23,19 +23,40 @@
         position: relative;
       }
 
-      .building-name {
-        text-align: center;
-        padding: 10px 20px;
-        font-size: 18px;
+
+      .building-header {
+        display: flex;
+        flex-direction: row;
+        padding: 5px;
+        background: $accent-color-200;
         border-top: 1px solid #C4C4C4;
         border-bottom: 1px solid #C4C4C4;
-        font-weight: 500;
-        background: $accent-color-200;
+
+        .building-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 3px double $accent-color-100;
+          padding: 10px;
+          background: $accent-color-300;
+        }
+
+        .building-name {
+          display: flex;
+          align-items: flex-start;
+          justify-content: flex-start;
+          flex: 1;
+          padding: 10px 20px;
+          font-size: 22px;
+          font-weight: 500;
+        }
       }
+
+
     }
     .building-dashboard {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       flex-wrap: wrap;
       justify-content: center;
       align-content: center;

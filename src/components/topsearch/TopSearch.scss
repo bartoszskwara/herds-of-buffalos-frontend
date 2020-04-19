@@ -8,6 +8,11 @@
   color: $accent-color-300;
   width: 100%;
 
+  .icon {
+    fill: $accent-color-300;
+    margin-top: 5px;
+  }
+
   .search-box {
     display: flex;
     flex-direction: column;

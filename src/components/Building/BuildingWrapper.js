@@ -10,7 +10,7 @@ const BuildingWrapper = props => {
 
     const buildingComponentMap = {
         barracks: <Building building="barracks" buildingLabel="BARRACKS" userId={props.currentUserData.id} cityId={props.currentUserData.currentCityId}/>,
-        townHall: <Building building="townHall" buildingLabel="TOWNHALL" userId={props.currentUserData.id} cityId={props.currentUserData.currentCityId}/>,
+        townHall: <Building construction building="townHall" buildingLabel="TOWNHALL" userId={props.currentUserData.id} cityId={props.currentUserData.currentCityId}/>,
         pasture: <Building building="pasture" buildingLabel="PASTURE" userId={props.currentUserData.id} cityId={props.currentUserData.currentCityId}/>,
         machineFactory: <Building building="machineFactory" buildingLabel="MACHINE FACTORY" userId={props.currentUserData.id} cityId={props.currentUserData.currentCityId}/>,
         shipyard: <Building building="shipyard" buildingLabel="SHIPYARD" userId={props.currentUserData.id} cityId={props.currentUserData.currentCityId}/>,

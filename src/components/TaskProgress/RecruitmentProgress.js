@@ -12,11 +12,12 @@ const RecruitmentProgress = props => {
 
     return <ProgressTile
         label={<span>{props.progressData.label} <span className="level">&ndash; {props.progressData.amount}</span></span> }
-        remainingTime={props.duration}
-        taskDuration={props.progressData.taskDuration}
+        timeSpent={props.timeSpent}
+        timeLeft={props.progressData.taskDuration}
         icon={unitIcon}
         iconLevel={props.progressData.unitLevel}
-        active={props.active} />
+        active={props.active}
+        fetchTasksProgress={props.fetchTasksProgress} />
 };
 
 RecruitmentProgress.propTypes = {
@@ -25,10 +26,12 @@ RecruitmentProgress.propTypes = {
         unitLevel: PropTypes.number.isRequired,
         label: PropTypes.string.isRequired,
         amount: PropTypes.number.isRequired,
+        startDate: PropTypes.number,
         taskDuration: PropTypes.number.isRequired,
     }).isRequired,
-    duration: PropTypes.object,
-    active: PropTypes.bool
+    timeSpent: PropTypes.object,
+    active: PropTypes.bool,
+    fetchTasksProgress: PropTypes.func
 };
 
 export default RecruitmentProgress;

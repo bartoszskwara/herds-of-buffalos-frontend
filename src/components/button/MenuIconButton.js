@@ -3,28 +3,25 @@ import './MenuIconButton.scss';
 import PropTypes from 'prop-types';
 import {NavLink} from "react-router-dom";
 
-class MenuIconButton extends React.Component {
-
-    static propTypes = {
-        menuItem: PropTypes.object,
-        horizontal: PropTypes.bool,
-        vertical: PropTypes.bool,
-        square: PropTypes.bool
-    };
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <NavLink to={this.props.menuItem.link} className={"MenuIconButton " + (this.props.horizontal ? 'horizontal' : '') + (this.props.vertical ? 'vertical' : '') + (this.props.square ? 'square' : '')}>
+const MenuIconButton = props => {
+    const { menuItem, horizontal, vertical, square } = props;
+    const icon = React.cloneElement(menuItem.icon, {
+        width: "35px", height: "35px"
+    });
+    return (
+        <NavLink to={menuItem.link} className={"MenuIconButton " + (horizontal ? 'horizontal' : '') + (vertical ? 'vertical' : '') + (square ? 'square' : '')}>
                 <span className="menuIcon">
-                    {this.props.menuItem.icon}
+                    {icon}
                 </span>
-            </NavLink>
-        );
-    }
-}
+        </NavLink>
+    );
+};
+
+MenuIconButton.propTypes = {
+    menuItem: PropTypes.object,
+    horizontal: PropTypes.bool,
+    vertical: PropTypes.bool,
+    square: PropTypes.bool
+};
 
 export default MenuIconButton;

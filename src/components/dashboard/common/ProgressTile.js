@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './ProgressTile.scss';
 import moment from "moment";
@@ -30,36 +30,68 @@ const createTimeString = (duration) => {
     }, "");
 };
 
-const calculateProgressWidth = (remainingTime, taskDuration) => {
-    return ((taskDuration - remainingTime.asMilliseconds()) * 100) / taskDuration;
+const calculateProgressWidth = (timeSpent, timeLeft) => {
+    return ((timeSpent.asMilliseconds()) * 100) / (timeSpent.asMilliseconds() + timeLeft);
 };
 
 const ProgressTile = props => {
-    const icon = React.cloneElement(
-        props.icon,
+    const {active, timeSpent, timeLeft, iconLevel, icon, label, fetchTasksProgress} = props;
+    const [timeState, setTimeSpentState] = useState({
+        timeSpent: timeSpent,
+        timeLeft: moment.duration(timeLeft),
+        progressWidth: calculateProgressWidth(timeSpent, timeLeft)
+    });
+
+    useEffect(() => {
+        let interval;
+        if(active) {
+            interval = setInterval(() => {
+                setTimeSpentState(prevState => {
+                    const timeSpent = prevState.timeSpent.add(1, 's');
+                    let timeLeft = prevState.timeLeft.subtract(1, 's');
+                    if(timeLeft.asMilliseconds() <= 0) {
+                        timeLeft = moment.duration(0);
+                    }
+                    const progressWidth = calculateProgressWidth(timeSpent, timeLeft);
+                    return {
+                        timeSpent,
+                        timeLeft,
+                        progressWidth
+                    }
+                });
+            }, 1000);
+        }
+        return () => interval ? clearInterval(interval) : undefined;
+    }, [active]);
+
+    useEffect(() => {
+        if(timeState.timeLeft <= 0) {
+            fetchTasksProgress();
+        }
+    }, [timeState]);
+
+    const itemIcon = React.cloneElement(
+        icon,
         { width: "30px", height: "30px" }
     );
-    const time = createTimeString(props.remainingTime);
-    const progressWidth = props.active ? calculateProgressWidth(props.remainingTime, props.taskDuration) : 0;
-
     return (
         <div className="ProgressTile">
             <div className="icon-wrapper">
-                {icon}
-                {props.iconLevel &&
+                {itemIcon}
+                {iconLevel &&
                     <div className="icon-badge-wrapper">
-                        <div className="icon-badge" style={{background: `rgba(${levelColorsRGB[props.iconLevel]},0.3)`}}>{convertToRomanian(props.iconLevel)}</div>
+                        <div className="icon-badge" style={{background: `rgba(${levelColorsRGB[iconLevel]},0.3)`}}>{convertToRomanian(iconLevel)}</div>
                     </div>}
             </div>
             <div className="progress-box">
                 <div className="label">
-                    <p>{props.label} <span className="time">&ndash; {time}</span></p>
+                    <p>{label} <span className="time">&ndash; {createTimeString(timeState.timeLeft)}</span></p>
                 </div>
                 <div className="progress-bar-box">
-                    {props.active && <div className="progress-bar" style={{width: `${progressWidth}%`}}>
-                        <p>{Math.floor(progressWidth)}%</p>
+                    {active && <div className="progress-bar" style={{width: `${timeState.progressWidth}%`}}>
+                        <p>{Math.floor(timeState.progressWidth)}%</p>
                     </div>}
-                    {!props.active && <div>Pending...</div>}
+                    {!active && <div>Pending...</div>}
                 </div>
             </div>
         </div>
@@ -67,12 +99,14 @@ const ProgressTile = props => {
 };
 
 ProgressTile.propTypes = {
-    remainingTime: PropTypes.object,
-    taskDuration: PropTypes.number,
+    timeSpent: PropTypes.object,
+    startDate: PropTypes.number,
+    timeLeft: PropTypes.number,
     icon: PropTypes.node.isRequired,
     label: PropTypes.node.isRequired,
     iconLevel: PropTypes.number,
-    active: PropTypes.bool
+    active: PropTypes.bool,
+    fetchTasksProgress: PropTypes.func
 };
 
 export default ProgressTile;

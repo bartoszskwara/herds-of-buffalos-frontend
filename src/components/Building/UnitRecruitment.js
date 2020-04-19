@@ -6,40 +6,17 @@ import {convertToRomanian} from "../dashboard/common/romanianNumber";
 import {skillIcons} from "../../static/Skills";
 import {resourceIcons} from "../../static/Resources";
 import Button from "../button/Button";
-
-const TableWithIcons = (props) => {
-    const items = props.items.map(i => ({
-        key: i.icon.key,
-        icon: React.cloneElement(i.icon.icon, { width: "23px", height: "23px"} ),
-        value: i.value
-    })).map(i => (
-        <div className="item" key={i.key}>
-            <div className="item-value">
-                {i.value}
-            </div>
-            <div className="item-icon">
-                {i.icon}
-            </div>
-        </div>
-    ));
-    return (
-        <div className="TableWithIcons">
-            {items}
-        </div>
-    );
-};
-TableWithIcons.propTypes = {
-    items: PropTypes.array.isRequired
-};
+import TableWithIcons from "./TableWithIcons";
 
 const UnitRecruitment = props => {
     const [numberToRecruit, setNumberToRecruit] = useState("");
-    const handleMaxToRecruitClick = () => setNumberToRecruit(props.level.maxToRecruit);
+    const {level, unit} = props;
+    const handleMaxToRecruitClick = () => setNumberToRecruit(level.maxToRecruit);
     const handleNumberToRecruitChange = (e) => {
         const value = parseInt(e.target.value, 10);
         if(Number.isNaN(value)) {
             setNumberToRecruit("");
-        } else if(value <= props.level.maxToRecruit) {
+        } else if(value <= level.maxToRecruit) {
             setNumberToRecruit(value);
         }
     };
@@ -49,49 +26,49 @@ const UnitRecruitment = props => {
             return;
         }
         const data = {
-            unit: props.unit.key,
-            level: props.level.level,
+            unit: unit.key,
+            level: level.level,
             amount: numberToRecruit
         };
         props.recruitUnits(data);
         setNumberToRecruit("");
     };
 
-    const unitIconData = unitIcons[props.unit.key] || unitIcons.unknown;
+    const unitIconData = unitIcons[unit.key] || unitIcons.unknown;
     const unitIcon = React.cloneElement(
         unitIconData.icon,
         { width: "50px", height: "50px" }
     );
-    const level = convertToRomanian(props.level.level);
+    const romanianLevel = convertToRomanian(level.level);
 
     const skills = Object.keys(skillIcons).filter(key => key !== 'unknown').map(skillIconKey => ({
         icon: skillIcons[skillIconKey],
-        value: props.level.skills[skillIconKey]
+        value: level.skills[skillIconKey]
     }));
     const cost = Object.keys(resourceIcons).filter(key => key !== 'unknown').map(resourceIconKey => ({
         icon: resourceIcons[resourceIconKey],
-        value: props.level.recruitmentCost[resourceIconKey]
+        value: level.recruitmentCost[resourceIconKey]
     }));
     const upgradeCost = Object.keys(resourceIcons).filter(key => key !== 'unknown').map(resourceIconKey => ({
         icon: resourceIcons[resourceIconKey],
-        value: props.level.upgradingCost[resourceIconKey]
+        value: level.upgradingCost[resourceIconKey]
     }));
 
     const styles = {
-        background: `rgba(${levelColorsRGB[props.level.level]},0.3)`
+        background: `rgba(${levelColorsRGB[level.level]},0.3)`
     };
     const skillsTable = <TableWithIcons items={skills} />;
     const costTable = <TableWithIcons items={cost} />;
     const upgradeCostTable = <TableWithIcons items={upgradeCost} />;
     return (
         <div className="UnitRecruitment">
-            {(!props.level.enabled && !props.level.upgradeRequirementsMet) && <div className="unit-disabled"></div>}
+            {(!level.enabled && !level.upgradeRequirementsMet) && <div className="unit-disabled"></div>}
             <div className="unit-info-box">
                 <div className="box-with-border icon">
                     {unitIcon}
                 </div>
                 <div className="box-with-border level" style={styles}>
-                    {level}
+                    {romanianLevel}
                 </div>
                 <div className="box-with-border skills-cost-box">
                     <div className="skills">
@@ -103,26 +80,24 @@ const UnitRecruitment = props => {
                 </div>
             </div>
             <div className="box-with-border unit-amount">
-                <p>{props.level.amountInCity}</p>
+                <p>{level.amountInCity}</p>
             </div>
             <div className="box-with-border action-box">
-                {props.level.enabled &&
+                {level.enabled &&
                 <div className="recruitment-box">
                     <div className="recruitment-input">
-                        <input type="text" name={`${props.unit.key}-${props.level.level}-recruit`} pattern="[0-9]*" value={numberToRecruit} onChange={handleNumberToRecruitChange}/>
-                        <p onClick={handleMaxToRecruitClick}>( {props.level.maxToRecruit} )</p>
+                        <input type="text" name={`${unit.key}-${level.level}-recruit`} pattern="[0-9]*" value={numberToRecruit} onChange={handleNumberToRecruitChange}/>
+                        <p onClick={handleMaxToRecruitClick}>( {level.maxToRecruit} )</p>
                     </div>
                     <Button value="RECRUIT" onClick={recruitUnits}/>
                 </div>}
-                {(!props.level.enabled) && <div className="upgrade-box">
+                {(!level.enabled) && <div className="upgrade-box">
                     <div className="upgradeCost">
                         {upgradeCostTable}
                     </div>
-                    <Button value="UPGRADE" disabled={!props.level.upgradeRequirementsMet} />
+                    <Button value="UPGRADE" disabled={!level.upgradeRequirementsMet} />
                 </div>}
             </div>
-
-
         </div>
     );
 };

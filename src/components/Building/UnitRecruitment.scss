@@ -130,34 +130,4 @@ $border-double: 3px double $accent-color-100;
       min-width: 90px;
     }
   }
-
-  .TableWithIcons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 2px;
-    box-sizing: border-box;
-    padding: 5px;
-
-
-    .item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      &:nth-child(even) {
-        margin: 0 5px;
-      }
-      .item-value {
-        font-size: 18px;
-        font-weight: 500;
-
-      }
-      .item-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-
-  }
 }

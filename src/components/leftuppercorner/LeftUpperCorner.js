@@ -1,6 +1,7 @@
 import React from 'react';
 import './LeftUpperCorner.scss';
 import MenuIconButton from "../button/MenuIconButton";
+import {menuItemsLeftUpperCorner} from "../../static/MenuIcons";
 
 class LeftUpperCorner extends React.Component {
 
@@ -11,14 +12,9 @@ class LeftUpperCorner extends React.Component {
     }
 
     render() {
-        const menuItem = {
-            name: "menuBar",
-            icon: <i className="fas fa-bars"></i>,
-            link: "/"
-        };
         return (
             <div className="LeftUpperCorner">
-                <MenuIconButton menuItem={menuItem} square />
+                <MenuIconButton menuItem={menuItemsLeftUpperCorner} square />
             </div>
         );
     }

@@ -49,6 +49,14 @@ export const Api = {
         }
     },
     cityBuilding: {
+        getCityBuildings: {
+            url: "/user/{userId}/city/{cityId}/building",
+            method: "get"
+        },
+        upgradeBuilding: {
+            url: "/user/{userId}/city/{cityId}/building",
+            method: "put"
+        },
         getCityBuildingProgress: {
             url: "/user/{userId}/city/{cityId}/building/progress",
             method: "get"

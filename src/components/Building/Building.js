@@ -7,13 +7,17 @@ import TasksProgress from "../TaskProgress/TasksProgress";
 import DashboardPanel from "../dashboard/common/DashboardPanel";
 import BuildingRecruitmentPanel from "./BuildingRecruitmentPanel";
 import UnexpectedError from "../error/UnexpectedError";
+import {buildingIcons} from "../../static/BuildingIcons";
+import BuildingConstructionPanel from "./BuildingConstructionPanel";
 
 const Building = props => {
-    const { userId, cityId, building, buildingLabel } = props;
+    const { userId, cityId, building, buildingLabel, buildingLevel, recruitment, construction } = props;
 
     const [tasksData, setTasksData] = useState({});
     const [unitsInBuilding, setUnitsInBuilding] = useState({});
+    const [buildingsInCity, setBuildingsInCity] = useState({});
     const [recruitmentError, setRecruitmentError] = useState(false);
+    const [constructionError, setConstructionError] = useState(false);
 
     const fetchTasksProgress = () => {
         apiCall(Api.cityBuilding.getTasksProgress, { pathVariables: { building, userId, cityId } })
@@ -43,10 +47,25 @@ const Building = props => {
             });
     };
 
+    const fetchAvailableBuildings = () => {
+        apiCall(Api.cityBuilding.getCityBuildings, { pathVariables: { userId, cityId } })
+            .then(response => {
+                setBuildingsInCity({
+                    buildings: response.data.content
+                });
+            })
+            .catch(error => {
+                setBuildingsInCity({
+                    error: "Error when fetching available buildings in city."
+                })
+            });
+    };
+
     const recruitUnits = (data = {}) => {
         apiCall(Api.cityUnit.recruitUnit, { data, pathVariables: { userId, cityId } })
             .then(response => {
                 fetchTasksProgress();
+                setTimeout(() => fetchTasksProgress(), 5000);
                 fetchAvailableUnits();
                 setRecruitmentError(false);
             })
@@ -55,10 +74,28 @@ const Building = props => {
             });
     };
 
+    const upgradeBuilding = (data = {}) => {
+        apiCall(Api.cityBuilding.upgradeBuilding, { data, pathVariables: { userId, cityId } })
+            .then(response => {
+                fetchTasksProgress();
+                setTimeout(() => fetchTasksProgress(), 5000);
+                fetchAvailableBuildings();
+                setConstructionError(false);
+            })
+            .catch(error => {
+                setConstructionError(true);
+            });
+    };
+
     useEffect(() => {
         if(userId) {
             fetchTasksProgress();
-            fetchAvailableUnits();
+            if(recruitment) {
+                fetchAvailableUnits();
+            }
+            if(construction) {
+                fetchAvailableBuildings();
+            }
         }
     }, [userId]);
 
@@ -74,6 +111,10 @@ const Building = props => {
 
     const buildingTasksProgress = <TasksProgress tasksData={tasksData} fetchTasksProgress={fetchTasksProgress} />;
     const buildingRecruitmentPanel = <BuildingRecruitmentPanel unitsInBuilding={unitsInBuilding} recruitUnits={recruitUnits} />;
+    const buildingConstructionPanel = <BuildingConstructionPanel buildingsInCity={buildingsInCity} upgradeBuilding={upgradeBuilding} />;
+
+    const icon = buildingIcons[building] || buildingIcons.unknown;
+    const buildingIcon = React.cloneElement(icon.icon, { width: "50px", height: "50px"});
 
     return (
         <div className="Building">
@@ -81,10 +122,18 @@ const Building = props => {
                 <div className="main-content">
                     <div className="recruitment-error">
                         {recruitmentError && <UnexpectedError message="Recruitment request failed" />}
+                        {constructionError && <UnexpectedError message="Construction request failed" />}
                     </div>
-                    <div className="building-name">{buildingLabel}</div>
+                    <div className="building-header">
+                        <div className="building-icon">{buildingIcon}</div>
+                        <div className="building-name">
+                            <p>{buildingLabel}</p>
+                            {buildingLevel && <p>{buildingLevel}</p>}
+                        </div>
+                    </div>
                     <div className="building-dashboard">
                         <DashboardPanel panel={buildingRecruitmentPanel} name="RECRUITMENT" />
+                        {buildingsInCity.buildings && <DashboardPanel panel={buildingConstructionPanel} name="CONSTRUCTION" />}
                     </div>
                 </div>
                 <div className="right-panel">
@@ -100,6 +149,12 @@ Building.propTypes = {
     cityId: PropTypes.number,
     building: PropTypes.string.isRequired,
     buildingLabel: PropTypes.string.isRequired,
+    buildingLevel: PropTypes.number,
+    recruitment: PropTypes.bool,
+    construction: PropTypes.bool
+};
+Building.defaultProps = {
+    recruitment: true
 };
 
 export default Building;

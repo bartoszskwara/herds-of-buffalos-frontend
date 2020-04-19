@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useHistory} from 'react-router-dom';
 import './Dashboard.scss';
 import {Api, apiCall} from '../../api/Api'
 import DashboardPanel from "./common/DashboardPanel";
@@ -45,6 +46,10 @@ const Dashboard = props => {
         buildingProgress: {},
         recruitmentProgress: {}
     });
+    const history = useHistory();
+    const goToTownHall = () => {
+        history.push("/building/townHall");
+    }
 
     useEffect(() => {
         if(props.currentUserData.userData) {
@@ -92,8 +97,8 @@ const Dashboard = props => {
         <div className="Dashboard">
             <div className="content">
                 <div className="main-content">
-                    <DashboardPanel panel={buildingProgressPanel} name="BUILDING PROGRESS" buttonLabel={buttonLabel(progressData.buildingProgress.removed)}/>
-                    <DashboardPanel panel={recruitmentProgressPanel} name="RECRUITMENT PROGRESS" buttonLabel={buttonLabel(progressData.recruitmentProgress.removed)}/>
+                    <DashboardPanel fixedHeight panel={buildingProgressPanel} name="BUILDING PROGRESS" buttonLabel={buttonLabel(progressData.buildingProgress.removed)} onClick={goToTownHall}/>
+                    <DashboardPanel fixedHeight panel={recruitmentProgressPanel} name="RECRUITMENT PROGRESS" buttonLabel={buttonLabel(progressData.recruitmentProgress.removed)}/>
                 </div>
                 <div className="right-panel">
                     <RightDashboardPanel panel={cityUnitsPanel} name="UNITS IN CITY" />

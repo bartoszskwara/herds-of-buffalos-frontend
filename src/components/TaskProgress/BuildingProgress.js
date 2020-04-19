@@ -12,10 +12,11 @@ const BuildingProgress = props => {
 
     return <ProgressTile
         label={<span>{props.progressData.label} <span className="level">&ndash; level {props.progressData.nextLevel}</span></span> }
-        remainingTime={props.duration}
-        taskDuration={props.progressData.taskDuration}
+        timeSpent={props.timeSpent}
+        timeLeft={props.progressData.taskDuration}
         icon={buildingIcon}
-        active={props.active}/>
+        active={props.active}
+        fetchTasksProgress={props.fetchTasksProgress} />
 };
 
 BuildingProgress.propTypes = {
@@ -23,10 +24,12 @@ BuildingProgress.propTypes = {
         building: PropTypes.string.isRequired,
         label: PropTypes.string.isRequired,
         nextLevel: PropTypes.number.isRequired,
+        startDate: PropTypes.number,
         taskDuration: PropTypes.number.isRequired,
     }).isRequired,
-    duration: PropTypes.object,
-    active: PropTypes.bool
+    timeSpent: PropTypes.object,
+    active: PropTypes.bool,
+    fetchTasksProgress: PropTypes.func
 };
 
 export default BuildingProgress;

@@ -9,57 +9,41 @@ import moment from "moment";
 
 const TasksProgress = props => {
     const [loading, isLoading] = useState(true);
-    const [inProgressTasksTimeLeft, setInProgressTasksTimeLeft] = useState([]);
+    const [tasksList, setTasksList] = useState([]);
+    const {tasksData, fetchTasksProgress} = props;
 
     useEffect(() => {
-        const intervals = [];
-        if(props.tasksData.tasks) {
+        if(tasksData.tasks) {
             isLoading(false);
-            const inProgressTasks = props.tasksData.tasks.filter(t => t.status === "InProgress");
-            const timeLefts = [];
-            inProgressTasks.forEach(task => {
-                const duration = moment.duration(moment(task.endDate).diff(moment()));
-                timeLefts.push({
-                    id: task.id,
-                    duration: duration,
-                });
-                setInProgressTasksTimeLeft(timeLefts);
-
-                intervals.push(setInterval(() => {
-                    const inProgressTaskTimeLeftArray = [...timeLefts];
-                    const timeLeftForTask = inProgressTaskTimeLeftArray.find(t => t.id === task.id);
-                    const duration = timeLeftForTask.duration.subtract(1, 's');
-                    if(duration.asMilliseconds() > 0) {
-                        Object.assign(timeLeftForTask, {
-                            duration
-                        });
-                        setInProgressTasksTimeLeft(inProgressTaskTimeLeftArray);
-                    } else {
-                        props.fetchTasksProgress();
-                    }
-                }, 1000));
-            });
+            setTasksList(tasksData.tasks);
         }
-        return () => { intervals.forEach(i => clearInterval(i)) };
-    }, [props.tasksData]);
+    }, [tasksData]);
 
-    if(props.tasksData.error) {
-        return <div className="TasksProgress"><LoadingError error={props.tasksData.error} /></div>
-    } else if(loading) {
-        return <div className="TasksProgress"><Loader /></div>
+    if(!tasksData || !tasksData.tasks) {
+        return null;
     }
 
-    const tasks = props.tasksData.tasks.map(task => {
-        const timeLeftForTask = inProgressTasksTimeLeft.find(t => t.id === task.id);
-        const duration = timeLeftForTask && task.status === "InProgress" ? timeLeftForTask.duration : moment.duration(task.taskDuration);
-        return task.type === 'building' ?
-            <BuildingProgress key={`building-task-${task.id}`} active={task.status === "InProgress"} duration={duration}  progressData={task}/>
-            : <RecruitmentProgress key={`recruitment-task-${task.id}`} active={task.status === "InProgress"} duration={duration}  progressData={task}/>
+    if(tasksData.error) {
+        return <div className="TasksProgress"><LoadingError error={tasksData.error} /></div>
+    }
+
+    if(tasksData.tasks && !tasksData.tasks.length) {
+        return <div className="TasksProgress"><LoadingError error="No tasks" /></div>;
+    }
+
+    const taskItems = tasksList.map(task => {
+        const timeSpent = task.startDate ? moment.duration(moment().valueOf() - task.startDate) : moment.duration(0);
+        return task.type === 'construction' ?
+            <BuildingProgress key={`building-task-${task.id}`} active={task.status === "InProgress"} timeSpent={timeSpent} progressData={task} fetchTasksProgress={fetchTasksProgress}/>
+            : <RecruitmentProgress key={`recruitment-task-${task.id}`} active={task.status === "InProgress"} timeSpent={timeSpent} progressData={task} fetchTasksProgress={fetchTasksProgress}/>
     });
 
     return (
         <div className="TasksProgress">
-            {tasks}
+            <Loader loading={loading}>
+                {(taskItems && taskItems.length === 0) && <div className="task-list-empty">Task queue is empty</div>}
+                {taskItems}
+            </Loader>
         </div>
     );
 };
@@ -77,6 +61,7 @@ TasksProgress.propTypes = {
             currentLevel: PropTypes.number,
             nextLevel: PropTypes.number,
             amount: PropTypes.number,
+            startDate: PropTypes.number,
             taskDuration: PropTypes.number,
             endDate: PropTypes.number,
             status: PropTypes.string
