@@ -8,7 +8,7 @@ import UnitRecruitment from "./UnitRecruitment";
 const BuildingRecruitmentPanel = props => {
     const [loading, isLoading] = useState(true);
     const [unitRecruitmentList, setUnitRecruitmentList] = useState([]);
-    const { unitsInBuilding } = props;
+    const { unitsInBuilding, recruitUnits, upgradeUnit } = props;
 
     useEffect(() => {
         if(unitsInBuilding.units) {
@@ -20,7 +20,8 @@ const BuildingRecruitmentPanel = props => {
                         unit={unitData.unit}
                         level={levelData}
                         maxLevel={unitData.maxLevel}
-                        recruitUnits={props.recruitUnits}
+                        recruitUnits={recruitUnits}
+                        upgradeUnit={upgradeUnit}
                     />));
                 return resultList;
             }, []);
@@ -49,6 +50,7 @@ const BuildingRecruitmentPanel = props => {
 BuildingRecruitmentPanel.propTypes = {
     unitsInBuilding: PropTypes.object,
     recruitUnits: PropTypes.func,
+    upgradeUnit: PropTypes.func
 };
 
 export default BuildingRecruitmentPanel;

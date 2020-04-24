@@ -1,36 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
 import './CityHeadline.scss';
 import Loader from "../loader/Loader";
 import LoadingError from "../error/LoadingError";
 import {resourceIcons} from "../../static/Resources";
-import {Api, apiCall} from "../../api/Api";
-import UserContext from "../../app/context/UserContext";
+import {CityContext} from "../../app/context/Context";
 
-
-const CityHeadline = props => {
+const CityHeadline = () => {
     const [loading, isLoading] = useState(true);
-    const [cityData, setCityData] = useState({});
     const [cityDataError, setCityDataError] = useState("");
-    const currentUserData = useContext(UserContext);
-
-    const getCityByCityIdAndUserId = (userId, cityId) => {
-        apiCall(Api.city.getCityByCityIdAndUserId, { pathVariables: { userId, cityId } })
-            .then(response => {
-                setCityData({
-                    ...response.data
-                })
-            })
-            .catch(error => setCityDataError("Error when fetching current city data."));
-    };
-
-    useEffect(() => {
-        if(currentUserData.id) {
-            getCityByCityIdAndUserId(currentUserData.id, currentUserData.currentCityId);
-        } else if(currentUserData.error) {
-            setCityDataError("Error when fetching current city data.");
-        }
-    }, [currentUserData]);
+    const cityData = useContext(CityContext);
 
     useEffect(() => {
         if(cityData) {
@@ -42,10 +20,7 @@ const CityHeadline = props => {
         return <div className="CityHeadline"><LoadingError error={cityDataError} /></div>;
     }
 
-    if(!cityData) {
-        return null;
-    }
-    if(!cityData.id) {
+    if(!cityData.id && !loading) {
         return <div className="CityHeadline"><LoadingError error="No city data" /></div>;
     }
 
@@ -78,20 +53,6 @@ const CityHeadline = props => {
             </div>
         </Loader>
     );
-};
-
-CityHeadline.propTypes = {
-    cityData: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        points: PropTypes.number.isRequired,
-        resources: PropTypes.shape({
-            wood: PropTypes.number.isRequired,
-            clay: PropTypes.number.isRequired,
-            iron: PropTypes.number.isRequired,
-        })
-    }),
-    error: PropTypes.string
 };
 
 export default CityHeadline;

@@ -34,6 +34,13 @@ const UnitRecruitment = props => {
         setNumberToRecruit("");
     };
 
+    const upgradeUnit = () => {
+        const data = {
+            unit: unit.key
+        };
+        props.upgradeUnit(data);
+    };
+
     const unitIconData = unitIcons[unit.key] || unitIcons.unknown;
     const unitIcon = React.cloneElement(
         unitIconData.icon,
@@ -95,7 +102,7 @@ const UnitRecruitment = props => {
                     <div className="upgradeCost">
                         {upgradeCostTable}
                     </div>
-                    <Button value="UPGRADE" disabled={!level.upgradeRequirementsMet} />
+                    <Button value="UPGRADE" disabled={!level.upgradeRequirementsMet} onClick={upgradeUnit}/>
                 </div>}
             </div>
         </div>
@@ -130,7 +137,9 @@ UnitRecruitment.propTypes = {
             iron: PropTypes.number.isRequired
         }).isRequired,
         maxToRecruit: PropTypes.number.isRequired
-    })
+    }),
+    recruitUnits: PropTypes.func,
+    upgradeUnit: PropTypes.func
 };
 
 export default UnitRecruitment;

@@ -1,17 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './PlayerHeadline.scss';
-import PropTypes from 'prop-types';
 import Loader from "../loader/Loader";
 import LoadingError from "../error/LoadingError";
+import {UserContext} from "../../app/context/Context";
 
 const PlayerHeadline = props => {
     const [loading, isLoading] = useState(true);
+    const currentUserData = useContext(UserContext);
 
     useEffect(() => {
-        if(props.userData) {
+        if(currentUserData) {
             isLoading(false);
         }
-    }, [props.userData]);
+    }, [currentUserData]);
 
     if(props.error) {
         return <div className="PlayerHeadline"><LoadingError error={props.error} /></div>
@@ -21,16 +22,11 @@ const PlayerHeadline = props => {
 
     return (
         <div className="PlayerHeadline">
-            <p>{props.userData.name} <span className="points">{`${props.userData.points}p.`}</span></p>
-            <p className="additional-data">{`ranking: ${props.userData.ranking}`}</p>
-            <p className="additional-data">{`number of cities: ${props.userData.numberOfCities}`}</p>
+            <p>{currentUserData.name} <span className="points">{`${currentUserData.points}p.`}</span></p>
+            <p className="additional-data">{`ranking: ${currentUserData.ranking}`}</p>
+            <p className="additional-data">{`number of cities: ${currentUserData.numberOfCities}`}</p>
         </div>
     );
-};
-
-PlayerHeadline.propTypes = {
-    userData: PropTypes.object,
-    error: PropTypes.string
 };
 
 export default PlayerHeadline;

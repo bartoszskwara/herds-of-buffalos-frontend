@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {unitIcons} from "../../static/Unit";
 import ProgressTile from "../dashboard/common/ProgressTile";
 
-const RecruitmentProgress = props => {
+const PromotionProgress = props => {
     const unitIconData = unitIcons[props.progressData.unit] || unitIcons.unknown;
     const unitIcon = React.cloneElement(
         unitIconData.icon,
@@ -11,23 +11,22 @@ const RecruitmentProgress = props => {
     );
 
     return <ProgressTile
-        label={<span>{props.progressData.label} <span className="level">&ndash; {props.progressData.amount}</span></span> }
+        label={<span>{props.progressData.label} <span className="level">&ndash; Level {props.progressData.level}</span></span> }
         timeSpent={props.timeSpent}
         timeLeft={props.progressData.taskDuration}
         icon={unitIcon}
-        iconLevel={props.progressData.unitLevel}
+        iconLevel={props.progressData.level}
         active={props.active}
-        type="recruitment"
+        type="promotion"
         fetchTasksProgress={props.fetchTasksProgress}
-        fetchAvailableUnits={props.fetchAvailableUnits}/>
+        fetchAvailableUnits={props.fetchAvailableUnits} />
 };
 
-RecruitmentProgress.propTypes = {
+PromotionProgress.propTypes = {
     progressData: PropTypes.shape({
         unit: PropTypes.string.isRequired,
-        unitLevel: PropTypes.number.isRequired,
+        level: PropTypes.number.isRequired,
         label: PropTypes.string.isRequired,
-        amount: PropTypes.number.isRequired,
         startDate: PropTypes.number,
         taskDuration: PropTypes.number.isRequired,
     }).isRequired,
@@ -36,4 +35,4 @@ RecruitmentProgress.propTypes = {
     fetchTasksProgress: PropTypes.func
 };
 
-export default RecruitmentProgress;
+export default PromotionProgress;

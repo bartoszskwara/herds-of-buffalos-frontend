@@ -16,7 +16,9 @@ const BuildingProgress = props => {
         timeLeft={props.progressData.taskDuration}
         icon={buildingIcon}
         active={props.active}
-        fetchTasksProgress={props.fetchTasksProgress} />
+        type="construction"
+        fetchTasksProgress={props.fetchTasksProgress}
+        fetchAvailableBuildings={props.fetchAvailableBuildings}/>
 };
 
 BuildingProgress.propTypes = {

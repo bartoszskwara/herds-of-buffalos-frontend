@@ -35,7 +35,7 @@ const calculateProgressWidth = (timeSpent, timeLeft) => {
 };
 
 const ProgressTile = props => {
-    const {active, timeSpent, timeLeft, iconLevel, icon, label, fetchTasksProgress} = props;
+    const {active, timeSpent, timeLeft, iconLevel, icon, label, type, fetchTasksProgress, fetchAvailableUnits, fetchAvailableBuildings} = props;
     const [timeState, setTimeSpentState] = useState({
         timeSpent: timeSpent,
         timeLeft: moment.duration(timeLeft),
@@ -67,6 +67,12 @@ const ProgressTile = props => {
     useEffect(() => {
         if(timeState.timeLeft <= 0) {
             fetchTasksProgress();
+            if(type === "promotion" || type === "recruitment") {
+                fetchAvailableUnits();
+            }
+            if(type === "construction") {
+                fetchAvailableBuildings();
+            }
         }
     }, [timeState]);
 
@@ -106,7 +112,10 @@ ProgressTile.propTypes = {
     label: PropTypes.node.isRequired,
     iconLevel: PropTypes.number,
     active: PropTypes.bool,
-    fetchTasksProgress: PropTypes.func
+    type: PropTypes.string,
+    fetchTasksProgress: PropTypes.func,
+    fetchAvailableUnits: PropTypes.func,
+    fetchAvailableBuildings: PropTypes.func
 };
 
 export default ProgressTile;

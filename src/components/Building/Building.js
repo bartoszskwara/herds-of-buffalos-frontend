@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import './Building.scss';
 import RightDashboardPanel from "../dashboard/common/RightDashboardPanel";
@@ -9,18 +9,21 @@ import BuildingRecruitmentPanel from "./BuildingRecruitmentPanel";
 import UnexpectedError from "../error/UnexpectedError";
 import {buildingIcons} from "../../static/BuildingIcons";
 import BuildingConstructionPanel from "./BuildingConstructionPanel";
+import {UserContext} from "../../app/context/Context";
 
 const Building = props => {
-    const { userId, cityId, building, buildingLabel, buildingLevel, recruitment, construction } = props;
-
-    const [tasksData, setTasksData] = useState({});
+    const { building, buildingLabel, buildingLevel, recruitment, construction } = props;
+    const [tasksData, setTasksData] = useState({
+        tasks: []
+    });
     const [unitsInBuilding, setUnitsInBuilding] = useState({});
     const [buildingsInCity, setBuildingsInCity] = useState({});
     const [recruitmentError, setRecruitmentError] = useState(false);
     const [constructionError, setConstructionError] = useState(false);
+    const currentUserId = useContext(UserContext);
 
     const fetchTasksProgress = () => {
-        apiCall(Api.cityBuilding.getTasksProgress, { pathVariables: { building, userId, cityId } })
+        apiCall(Api.cityBuilding.getTasksProgress, { pathVariables: { building, userId: currentUserId.id, cityId: currentUserId.currentCityId } })
             .then(response => {
                 setTasksData({
                     tasks: response.data.content
@@ -34,7 +37,7 @@ const Building = props => {
     };
 
     const fetchAvailableUnits = () => {
-        apiCall(Api.cityBuilding.getAvailableUnits, { pathVariables: { building, userId, cityId } })
+        apiCall(Api.cityBuilding.getAvailableUnits, { pathVariables: { building, userId: currentUserId.id, cityId: currentUserId.currentCityId } })
             .then(response => {
                 setUnitsInBuilding({
                     units: response.data.content
@@ -48,7 +51,7 @@ const Building = props => {
     };
 
     const fetchAvailableBuildings = () => {
-        apiCall(Api.cityBuilding.getCityBuildings, { pathVariables: { userId, cityId } })
+        apiCall(Api.cityBuilding.getCityBuildings, { pathVariables: { userId: currentUserId.id, cityId: currentUserId.currentCityId } })
             .then(response => {
                 setBuildingsInCity({
                     buildings: response.data.content
@@ -62,10 +65,21 @@ const Building = props => {
     };
 
     const recruitUnits = (data = {}) => {
-        apiCall(Api.cityUnit.recruitUnit, { data, pathVariables: { userId, cityId } })
+        apiCall(Api.cityUnit.recruitUnit, { data, pathVariables: { userId: currentUserId.id, cityId: currentUserId.currentCityId } })
             .then(response => {
                 fetchTasksProgress();
-                setTimeout(() => fetchTasksProgress(), 5000);
+                fetchAvailableUnits();
+                setRecruitmentError(false);
+            })
+            .catch(error => {
+                setRecruitmentError(true);
+            });
+    };
+
+    const upgradeUnit = (data = {}) => {
+        apiCall(Api.cityUnit.upgradeUnit, { data, pathVariables: { userId: currentUserId.id, cityId: currentUserId.currentCityId } })
+            .then(response => {
+                fetchTasksProgress();
                 fetchAvailableUnits();
                 setRecruitmentError(false);
             })
@@ -75,10 +89,9 @@ const Building = props => {
     };
 
     const upgradeBuilding = (data = {}) => {
-        apiCall(Api.cityBuilding.upgradeBuilding, { data, pathVariables: { userId, cityId } })
+        apiCall(Api.cityBuilding.upgradeBuilding, { data, pathVariables: { userId: currentUserId.id, cityId: currentUserId.currentCityId } })
             .then(response => {
                 fetchTasksProgress();
-                setTimeout(() => fetchTasksProgress(), 5000);
                 fetchAvailableBuildings();
                 setConstructionError(false);
             })
@@ -88,7 +101,9 @@ const Building = props => {
     };
 
     useEffect(() => {
-        if(userId) {
+        setBuildingsInCity({});
+        setUnitsInBuilding({});
+        if(currentUserId.id) {
             fetchTasksProgress();
             if(recruitment) {
                 fetchAvailableUnits();
@@ -97,7 +112,7 @@ const Building = props => {
                 fetchAvailableBuildings();
             }
         }
-    }, [userId]);
+    }, [building]);
 
     useEffect(() => {
         const timeout = null;
@@ -109,9 +124,39 @@ const Building = props => {
         return clearTimeout(timeout);
     }, [recruitmentError]);
 
-    const buildingTasksProgress = <TasksProgress tasksData={tasksData} fetchTasksProgress={fetchTasksProgress} />;
-    const buildingRecruitmentPanel = <BuildingRecruitmentPanel unitsInBuilding={unitsInBuilding} recruitUnits={recruitUnits} />;
-    const buildingConstructionPanel = <BuildingConstructionPanel buildingsInCity={buildingsInCity} upgradeBuilding={upgradeBuilding} />;
+    const existTaskOfTypeButNotInProgress = (tasks, type) => {
+        return tasks.find(t => t.type === type) && !tasks.find(t => t.type === type && t.status === "InProgress");
+    }
+    useEffect(() => {
+        let timeout;
+        if(tasksData.tasks && tasksData.tasks.length > 0) {
+            if(existTaskOfTypeButNotInProgress(tasksData.tasks, "recruitment")
+                || existTaskOfTypeButNotInProgress(tasksData.tasks, "construction")
+                || existTaskOfTypeButNotInProgress(tasksData.tasks, "promotion"))
+            {
+                timeout = setTimeout(() => {
+                    fetchTasksProgress();
+                }, 1000);
+            }
+        }
+        return () => clearTimeout(timeout);
+    }, [tasksData]);
+
+    const buildingTasksProgress = <TasksProgress
+        tasksData={tasksData}
+        fetchTasksProgress={fetchTasksProgress}
+        fetchAvailableUnits={fetchAvailableUnits}
+        fetchAvailableBuildings={fetchAvailableBuildings}
+    />;
+    const buildingRecruitmentPanel = <BuildingRecruitmentPanel
+        unitsInBuilding={unitsInBuilding}
+        recruitUnits={recruitUnits}
+        upgradeUnit={upgradeUnit}
+    />;
+    const buildingConstructionPanel = <BuildingConstructionPanel
+        buildingsInCity={buildingsInCity}
+        upgradeBuilding={upgradeBuilding}
+    />;
 
     const icon = buildingIcons[building] || buildingIcons.unknown;
     const buildingIcon = React.cloneElement(icon.icon, { width: "50px", height: "50px"});

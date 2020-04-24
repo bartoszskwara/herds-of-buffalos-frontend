@@ -6,11 +6,12 @@ import Loader from "../loader/Loader";
 import BuildingProgress from "../TaskProgress/BuildingProgress";
 import RecruitmentProgress from "../TaskProgress/RecruitmentProgress";
 import moment from "moment";
+import PromotionProgress from "./PromotionProgress";
 
 const TasksProgress = props => {
     const [loading, isLoading] = useState(true);
     const [tasksList, setTasksList] = useState([]);
-    const {tasksData, fetchTasksProgress} = props;
+    const {tasksData, fetchTasksProgress, fetchAvailableBuildings, fetchAvailableUnits} = props;
 
     useEffect(() => {
         if(tasksData.tasks) {
@@ -27,15 +28,31 @@ const TasksProgress = props => {
         return <div className="TasksProgress"><LoadingError error={tasksData.error} /></div>
     }
 
-    if(tasksData.tasks && !tasksData.tasks.length) {
-        return <div className="TasksProgress"><LoadingError error="No tasks" /></div>;
-    }
-
     const taskItems = tasksList.map(task => {
         const timeSpent = task.startDate ? moment.duration(moment().valueOf() - task.startDate) : moment.duration(0);
-        return task.type === 'construction' ?
-            <BuildingProgress key={`building-task-${task.id}`} active={task.status === "InProgress"} timeSpent={timeSpent} progressData={task} fetchTasksProgress={fetchTasksProgress}/>
-            : <RecruitmentProgress key={`recruitment-task-${task.id}`} active={task.status === "InProgress"} timeSpent={timeSpent} progressData={task} fetchTasksProgress={fetchTasksProgress}/>
+
+        switch (task.type) {
+            case 'construction':
+                return <BuildingProgress key={`building-task-${task.id}`}
+                                         active={task.status === "InProgress"}
+                                         timeSpent={timeSpent} progressData={task}
+                                         fetchTasksProgress={fetchTasksProgress}
+                                         fetchAvailableBuildings={fetchAvailableBuildings} />
+            case 'recruitment':
+                return <RecruitmentProgress key={`recruitment-task-${task.id}`}
+                                            active={task.status === "InProgress"}
+                                            timeSpent={timeSpent} progressData={task}
+                                            fetchTasksProgress={fetchTasksProgress}
+                                            fetchAvailableUnits={fetchAvailableUnits}/>
+            case 'promotion':
+                return <PromotionProgress key={`promotion-task-${task.id}`}
+                                          active={task.status === "InProgress"}
+                                          timeSpent={timeSpent} progressData={task}
+                                          fetchTasksProgress={fetchTasksProgress}
+                                          fetchAvailableUnits={fetchAvailableUnits}/>
+            default:
+                return undefined;
+        }
     });
 
     return (
@@ -50,7 +67,7 @@ const TasksProgress = props => {
 
 TasksProgress.propTypes = {
     tasksData: PropTypes.shape({
-        tasks: PropTypes.arrayOf({
+        tasks: PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.number,
             type: PropTypes.string,
             creationDate: PropTypes.number,
@@ -65,9 +82,11 @@ TasksProgress.propTypes = {
             taskDuration: PropTypes.number,
             endDate: PropTypes.number,
             status: PropTypes.string
-        })
+        }))
     }),
-    fetchTasksProgress: PropTypes.func.isRequired
+    fetchTasksProgress: PropTypes.func.isRequired,
+    fetchAvailableUnits: PropTypes.func,
+    fetchAvailableBuildings: PropTypes.func
 };
 
 export default TasksProgress;

@@ -1,6 +1,5 @@
 import React from 'react';
 import './Test.scss';
-import PropTypes from 'prop-types';
 
 class Test extends React.Component {
 

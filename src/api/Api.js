@@ -43,6 +43,10 @@ export const Api = {
             url: "/user/{userId}/city/{cityId}/unit",
             method: "post"
         },
+        upgradeUnit: {
+            url: "/user/{userId}/city/{cityId}/unit/promote",
+            method: "post"
+        },
         getCityRecruitmentProgress: {
             url: "/user/{userId}/city/{cityId}/unit/progress",
             method: "get"
